@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   adminListSchema,
+  agendaSessionSchema,
   calendarDaySchema,
   dashboardSummarySchema,
   mediaDetailSchema,
+  photographerDetailSchema,
+  studentDetailSchema,
   studentListSchema,
 } from "./admin-schemas";
 
@@ -90,5 +93,90 @@ describe("admin-schemas", () => {
       items: [{ id: "u1", name: "Admin", email: "admin@x.test" }],
     });
     expect(result.success).toBe(true);
+  });
+
+  it("recusa sessão da agenda sem endTime e aceita o contrato completo (CmsCalendarSession)", () => {
+    const withoutEndTime = {
+      id: "sess1",
+      location: "Praia Mole",
+      startTime: "09:00",
+      photographer: { id: "f1", name: "Fotógrafa E2E" },
+      photoCount: 10,
+      videoCount: 1,
+      coverUrl: null,
+    };
+    expect(agendaSessionSchema.safeParse(withoutEndTime).success).toBe(false);
+
+    const complete = { ...withoutEndTime, endTime: "10:30" };
+    expect(agendaSessionSchema.safeParse(complete).success).toBe(true);
+  });
+
+  it("recusa aula recente do aluno sem endTime/location e aceita o contrato completo (CmsStudentLesson)", () => {
+    const base = {
+      id: "st1",
+      name: "Aluno",
+      email: "aluno@x.test",
+      plan: "paid",
+      blocked: false,
+      createdAt: "2026-09-01T00:00:00.000Z",
+      lessonsCount: 1,
+      enrollmentsCount: 0,
+      taggedSessionsCount: 0,
+    };
+    const lessonWithoutFields = {
+      id: "l1",
+      date: "2026-09-24",
+      startTime: "09:00",
+      professor: { id: "p1", name: "Professor E2E" },
+      status: "confirmed",
+    };
+    expect(
+      studentDetailSchema.safeParse({
+        ...base,
+        recentLessons: [lessonWithoutFields],
+      }).success,
+    ).toBe(false);
+
+    const complete = studentDetailSchema.safeParse({
+      ...base,
+      recentLessons: [
+        { ...lessonWithoutFields, endTime: "10:00", location: "Praia Mole" },
+      ],
+    });
+    expect(complete.success).toBe(true);
+  });
+
+  it("recusa sessão recente do fotógrafo sem startTime/coverUrl e aceita o contrato completo (CmsPhotographerSession)", () => {
+    const base = {
+      id: "ph1",
+      name: "Fotógrafa",
+      email: "foto@x.test",
+      blocked: false,
+      createdAt: "2026-09-01T00:00:00.000Z",
+      sessionsCount: 1,
+      photosCount: 10,
+      videosCount: 1,
+    };
+    const sessionWithoutFields = {
+      id: "s1",
+      location: "Praia Mole",
+      sessionDate: "2026-09-24",
+      photoCount: 10,
+      videoCount: 1,
+    };
+    expect(
+      photographerDetailSchema.safeParse({
+        ...base,
+        recentSessions: [sessionWithoutFields],
+      }).success,
+    ).toBe(false);
+
+    const complete = photographerDetailSchema.safeParse({
+      ...base,
+      recentSessions: [
+        { ...sessionWithoutFields, startTime: null, coverUrl: null },
+      ],
+    });
+    expect(complete.success).toBe(true);
   });
 });
