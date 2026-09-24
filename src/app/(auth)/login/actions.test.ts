@@ -115,4 +115,23 @@ describe("loginAction", () => {
     expect(result).toEqual({ error: "Serviço indisponível" });
     expect(mocks.clearSession).toHaveBeenCalled();
   });
+
+  it("curadoria entra e vai para /painel", async () => {
+    mocks.apiRequest
+      .mockResolvedValueOnce(loginOk)
+      .mockResolvedValueOnce({ ...accessOk, canCurate: true });
+
+    await expect(loginAction(null, form())).rejects.toThrow("NEXT_REDIRECT:/painel");
+  });
+
+  it("conta bloqueada (403 ACCOUNT_BLOCKED) mostra a mensagem de bloqueio", async () => {
+    mocks.apiRequest.mockRejectedValueOnce(
+      new ApiError(403, "Account blocked", "ACCOUNT_BLOCKED"),
+    );
+
+    await expect(loginAction(null, form())).resolves.toEqual({
+      error: "Conta bloqueada. Fale com o suporte FlowState.",
+    });
+    expect(mocks.setSession).not.toHaveBeenCalled();
+  });
 });

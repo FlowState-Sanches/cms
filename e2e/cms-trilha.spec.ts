@@ -125,7 +125,7 @@ test.describe("professor cria e submete, admin publica, app vê (FLOW-438)", () 
     await logout(page);
 
     await login(page, users.admin);
-    await expect(page).toHaveURL(/\/treinos$/);
+    await expect(page).toHaveURL(/\/painel$/);
 
     // Captura o token do admin assim que ele loga (antes de publicar): se o
     // teste falhar a partir daqui, o `afterAll` ainda consegue arquivar o
@@ -196,7 +196,7 @@ test.describe("admin desarquiva um treino arquivado", () => {
     await archiveTraining(request, adminToken, trainingId);
 
     await login(page, users.admin);
-    await expect(page).toHaveURL(/\/treinos$/);
+    await expect(page).toHaveURL(/\/painel$/);
     await page.goto(`/treinos/${trainingId}`);
     await expect(page.getByText("Arquivado", { exact: true }).first()).toBeVisible();
 

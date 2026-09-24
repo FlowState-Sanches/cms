@@ -1,12 +1,13 @@
-export default function Home() {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-2 bg-background px-6 text-center font-sans">
-      <h1 className="font-display text-3xl font-semibold text-text">
-        FlowState CMS
-      </h1>
-      <p className="max-w-md text-text-muted">
-        Cadastro e curadoria de exercícios da Trilha de Aprendizado.
-      </p>
-    </div>
-  );
+import { redirect } from "next/navigation";
+import { getAccess } from "@/lib/api/cached";
+import { homePathFor } from "@/lib/permissions";
+
+/**
+ * `/` decide o destino pelo papel lido da API (o proxy não tem esse dado,
+ * só o cookie). Sem cookie, o proxy já mandou para /login; com 401,
+ * `getAccess` redireciona para /sessao-expirada.
+ */
+export default async function Home(): Promise<never> {
+  const access = await getAccess();
+  redirect(homePathFor(access));
 }

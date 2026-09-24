@@ -77,3 +77,8 @@ export function availableStatusActions(
 
   return actions;
 }
+
+/** Primeira tela depois do login e de `/`: curadoria cai no painel, professor nos treinos. */
+export function homePathFor(access: Pick<CmsAccess, "canCurate">): "/painel" | "/treinos" {
+  return access.canCurate ? "/painel" : "/treinos";
+}

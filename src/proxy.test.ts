@@ -9,9 +9,14 @@ function request(pathname: string, cookie?: string): NextRequest {
 }
 
 describe("proxy", () => {
-  it("redireciona / para /treinos", () => {
+  it("deixa / passar com cookie (a página decide o destino pelo papel)", () => {
+    const response = proxy(request("/", "token-valido"));
+    expect(response.headers.get("location")).toBeNull();
+  });
+
+  it("redireciona / para /login sem cookie", () => {
     const response = proxy(request("/"));
-    expect(response.headers.get("location")).toBe("http://localhost:3001/treinos");
+    expect(response.headers.get("location")).toBe("http://localhost:3001/login");
   });
 
   it("deixa /sessao-expirada passar mesmo sem cookie", () => {
@@ -24,9 +29,9 @@ describe("proxy", () => {
     expect(response.headers.get("location")).toBeNull();
   });
 
-  it("redireciona /login para /treinos quando já há cookie de sessão", () => {
+  it("redireciona /login para / quando já há cookie de sessão", () => {
     const response = proxy(request("/login", "token-valido"));
-    expect(response.headers.get("location")).toBe("http://localhost:3001/treinos");
+    expect(response.headers.get("location")).toBe("http://localhost:3001/");
   });
 
   it("deixa /login passar sem cookie", () => {
