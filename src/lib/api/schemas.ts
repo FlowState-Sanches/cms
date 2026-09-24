@@ -29,6 +29,7 @@ export const eventActionSchema = z.enum([
   "reordered",
   "video_attached",
   "video_removed",
+  "unarchived",
 ]);
 export type EventAction = z.infer<typeof eventActionSchema>;
 

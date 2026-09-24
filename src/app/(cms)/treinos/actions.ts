@@ -33,13 +33,15 @@ export type VideoUploadActionResult =
     }
   | { ok: false; error: string };
 
-type TransitionKey = "submeter" | "publicar" | "despublicar" | "arquivar";
+type TransitionKey =
+  "submeter" | "publicar" | "despublicar" | "arquivar" | "desarquivar";
 
 const transitionSchema = z.enum([
   "submeter",
   "publicar",
   "despublicar",
   "arquivar",
+  "desarquivar",
 ]);
 
 const reorderActionInputSchema = z.object({

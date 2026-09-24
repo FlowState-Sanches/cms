@@ -12,7 +12,13 @@ type TrainingPermissionFields = Pick<
 >;
 
 export type StatusActionKey =
-  "submeter" | "publicar" | "devolver" | "despublicar" | "arquivar" | "excluir";
+  | "submeter"
+  | "publicar"
+  | "devolver"
+  | "despublicar"
+  | "arquivar"
+  | "desarquivar"
+  | "excluir";
 
 function isAuthor(
   training: TrainingPermissionFields,
@@ -56,6 +62,9 @@ export function availableStatusActions(
   }
   if (admin && status !== "archived") {
     actions.push("arquivar");
+  }
+  if (admin && status === "archived") {
+    actions.push("desarquivar");
   }
   if (
     status === "draft" &&

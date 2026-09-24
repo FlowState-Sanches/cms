@@ -153,6 +153,18 @@ describe("transições", () => {
     expect(mocks.revalidatePath).toHaveBeenCalledWith("/treinos/tecnico-t9");
   });
 
+  it("transitionAction aceita desarquivar", async () => {
+    mocks.cmsApi.transition.mockResolvedValue({});
+    expect(await transitionAction("tecnico-t9", "desarquivar")).toEqual({
+      ok: true,
+      id: "tecnico-t9",
+    });
+    expect(mocks.cmsApi.transition).toHaveBeenCalledWith(
+      "tecnico-t9",
+      "desarquivar",
+    );
+  });
+
   it("transitionAction rejeita ação desconhecida", async () => {
     const result = await transitionAction("tecnico-t9", "apagar" as never);
     expect(result.ok).toBe(false);

@@ -62,6 +62,16 @@ describe("availableStatusActions", () => {
     ).toEqual(["submeter"]);
   });
 
+  it("desarquivar é só da curadoria e só para arquivado", () => {
+    expect(availableStatusActions(training("archived"), admin)).toEqual([
+      "desarquivar",
+    ]);
+    expect(availableStatusActions(training("archived"), professor)).toEqual([]);
+    expect(availableStatusActions(training("published"), admin)).not.toContain(
+      "desarquivar",
+    );
+  });
+
   it("treino sem autor: professor não vê ações", () => {
     expect(
       availableStatusActions({ ...training("draft"), author: null }, professor),

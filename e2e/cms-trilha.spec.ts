@@ -154,6 +154,62 @@ test.describe("professor cria e submete, admin publica, app vê (FLOW-438)", () 
   });
 });
 
+test.describe("admin desarquiva um treino arquivado", () => {
+  let trainingId: string | undefined;
+  let adminToken: string | undefined;
+
+  test.afterAll(async ({ request }) => {
+    // Volta a arquivar o treino de teste para não deixar rascunho na trilha local.
+    if (trainingId && adminToken) {
+      await archiveTraining(request, adminToken, trainingId).catch(() => {
+        /* best-effort */
+      });
+    }
+  });
+
+  test("treino arquivado volta como rascunho pela tela", async ({ page, request }) => {
+    const users = readSeedUsers();
+    const code = uniqueCode();
+    const title = `Desarquivar E2E ${code}`;
+    adminToken = await apiLogin(request, users.admin);
+    const auth = { Authorization: `Bearer ${adminToken}` };
+
+    const created = await request.post(`${API_BASE_URL}/cms/trilha/treinos`, {
+      headers: auth,
+      data: {
+        pillar: "tecnico",
+        code,
+        title,
+        subtitle: "Verificação do desarquivamento",
+        levelLabel: "Iniciante",
+        durationMinutes: 10,
+        summary: "Treino criado pelo E2E para validar o desarquivamento.",
+        learnings: ["Validar o retorno de arquivado para rascunho."],
+        coach: { quote: "Nada se perde.", author: "Coach E2E" },
+        unlockHint: "Complete o treino anterior.",
+        selfAssessment: ["O treino voltou como rascunho?"],
+        reference: null,
+      },
+    });
+    expect(created.ok()).toBe(true);
+    trainingId = ((await created.json()) as { id: string }).id;
+    await archiveTraining(request, adminToken, trainingId);
+
+    await login(page, users.admin);
+    await expect(page).toHaveURL(/\/treinos$/);
+    await page.goto(`/treinos/${trainingId}`);
+    await expect(page.getByText("Arquivado", { exact: true }).first()).toBeVisible();
+
+    await page.getByRole("button", { name: "Desarquivar" }).click();
+    const dialog = page.getByRole("dialog", { name: "Desarquivar treino" });
+    await dialog.getByRole("button", { name: "Confirmar desarquivamento" }).click();
+
+    await expect(page.getByText("Rascunho", { exact: true }).first()).toBeVisible();
+    await expect(page.getByText("Desarquivado").first()).toBeVisible();
+    await expect(page.getByRole("button", { name: "Desarquivar" })).toHaveCount(0);
+  });
+});
+
 test("surfista não entra no CMS", async ({ page, request }) => {
   const stamp = Date.now();
   const email = `e2e-surfista-${stamp}@flowstate.test`;

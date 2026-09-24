@@ -47,6 +47,24 @@ describe("cmsTrainingSchema (resposta da API)", () => {
     });
   });
 
+  it("aceita evento de desarquivamento no histórico", () => {
+    const result = cmsTrainingSchema.safeParse({
+      ...baseTraining,
+      status: "draft",
+      reference: null,
+      events: [
+        {
+          id: "e1",
+          action: "unarchived",
+          comment: null,
+          actor: { id: "adm", name: "Admin" },
+          createdAt: "2026-09-24T00:00:00.000Z",
+        },
+      ],
+    });
+    expect(result.success).toBe(true);
+  });
+
   it("aceita reference nula", () => {
     const result = cmsTrainingSchema.safeParse({
       ...baseTraining,

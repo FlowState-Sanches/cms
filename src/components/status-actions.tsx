@@ -34,7 +34,7 @@ type StatusActionsProps = {
   hasUnsavedChanges?: boolean;
 };
 
-type DialogKey = "devolver" | "arquivar" | "excluir";
+type DialogKey = "devolver" | "arquivar" | "desarquivar" | "excluir";
 
 const ACTION_LABELS: Record<StatusActionKey, string> = {
   submeter: "Enviar para revisão",
@@ -42,6 +42,7 @@ const ACTION_LABELS: Record<StatusActionKey, string> = {
   devolver: "Devolver",
   despublicar: "Despublicar",
   arquivar: "Arquivar",
+  desarquivar: "Desarquivar",
   excluir: "Excluir",
 };
 
@@ -61,7 +62,7 @@ const COMMENT_MESSAGE = `Escreva um comentário de ${COMMENT.min} a ${COMMENT.ma
 
 /**
  * Botões de mudança de status do treino, calculados pela matriz de permissão
- * do Contrato (a API revalida tudo). Devolver, Arquivar e Excluir abrem um
+ * do Contrato (a API revalida tudo). Devolver, Arquivar, Desarquivar e Excluir abrem um
  * `<dialog>` nativo com `showModal()`: o navegador prende o foco dentro do
  * diálogo e Esc cancela.
  */
@@ -80,15 +81,18 @@ export function StatusActions({
 
   const giveBackDialogRef = useRef<HTMLDialogElement>(null);
   const archiveDialogRef = useRef<HTMLDialogElement>(null);
+  const unarchiveDialogRef = useRef<HTMLDialogElement>(null);
   const deleteDialogRef = useRef<HTMLDialogElement>(null);
   const commentRef = useRef<HTMLTextAreaElement>(null);
   const archiveCancelRef = useRef<HTMLButtonElement>(null);
+  const unarchiveCancelRef = useRef<HTMLButtonElement>(null);
   const deleteCancelRef = useRef<HTMLButtonElement>(null);
 
   // Só chamado em handlers de evento (nunca durante o render).
   function dialogFor(key: DialogKey): HTMLDialogElement | null {
     if (key === "devolver") return giveBackDialogRef.current;
     if (key === "arquivar") return archiveDialogRef.current;
+    if (key === "desarquivar") return unarchiveDialogRef.current;
     return deleteDialogRef.current;
   }
 
@@ -105,6 +109,8 @@ export function StatusActions({
       commentRef.current?.focus();
     } else if (key === "arquivar") {
       archiveCancelRef.current?.focus();
+    } else if (key === "desarquivar") {
+      unarchiveCancelRef.current?.focus();
     } else {
       deleteCancelRef.current?.focus();
     }
@@ -235,8 +241,32 @@ export function StatusActions({
           onClose={() => setDialogError(null)}
         >
           <p className="text-sm text-text-muted">
-            O treino sai do app dos alunos e não pode mais ser editado. Não há
-            como desarquivar pelo CMS.
+            O treino sai do app dos alunos e não pode mais ser editado até a
+            curadoria desarquivar.
+          </p>
+        </ConfirmDialog>
+      )}
+
+      {available.includes("desarquivar") && (
+        <ConfirmDialog
+          dialogRef={unarchiveDialogRef}
+          cancelRef={unarchiveCancelRef}
+          title="Desarquivar treino"
+          error={dialogError}
+          pending={pending}
+          confirmLabel="Confirmar desarquivamento"
+          onConfirm={() =>
+            run(
+              () => transitionAction(training.id, "desarquivar"),
+              "desarquivar",
+            )
+          }
+          onCancel={() => closeDialog("desarquivar")}
+          onClose={() => setDialogError(null)}
+        >
+          <p className="text-sm text-text-muted">
+            O treino volta como rascunho, no fim do pilar, e só reaparece no app
+            depois de publicado de novo.
           </p>
         </ConfirmDialog>
       )}
