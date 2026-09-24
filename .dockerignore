@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.github
+
+.env*
+
+.maestri
+
+e2e/.auth
+test-results
+playwright-report
+coverage
+
+npm-debug.log*
+*.tsbuildinfo
+.DS_Store
