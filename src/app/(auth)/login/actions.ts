@@ -12,6 +12,16 @@ const loginInputSchema = z.object({
   password: z.string().min(1, "Informe sua senha.").max(72, "Senha inválida."),
 });
 
+// Só erro da API vira mensagem no formulário. Qualquer outro (env inválido, resposta
+// fora do schema, rede) é defeito de ambiente ou de código: registra no log do servidor
+// e propaga para a fronteira de erro, em vez de se passar por "tente de novo".
+function rethrowUnlessApiError(error: unknown): asserts error is ApiError {
+  if (!(error instanceof ApiError)) {
+    console.error("[login] falha fora da API ao entrar no CMS:", error);
+    throw error;
+  }
+}
+
 export type LoginActionState = {
   error: string;
 } | null;
@@ -37,7 +47,8 @@ export async function loginAction(
     });
     accessToken = login.accessToken;
   } catch (error) {
-    if (error instanceof ApiError && error.status === 401) {
+    rethrowUnlessApiError(error);
+    if (error.status === 401) {
       return { error: "E-mail ou senha incorretos." };
     }
     return { error: messageFor(error) };
@@ -53,11 +64,13 @@ export async function loginAction(
     if (!access.canEdit) {
       await clearSession();
       return {
-        error: "Sua conta não tem acesso ao CMS da Trilha. Fale com a curadoria FlowState.",
+        error:
+          "Sua conta não tem acesso ao CMS da Trilha. Fale com a curadoria FlowState.",
       };
     }
   } catch (error) {
     await clearSession();
+    rethrowUnlessApiError(error);
     return { error: messageFor(error) };
   }
 

@@ -44,5 +44,6 @@ Pré-requisitos e o que o `globalSetup` faz: ver "E2E: pré-requisitos" em `READ
 - Rotas e copy em PT-BR, sem travessão. Entidades e colunas em inglês (padrão do módulo trilha na API).
 - Erros da API vêm com `{ statusCode, message, code }`; o CMS traduz `code` para mensagem de formulário quando existir mapeamento, senão mostra `message`.
 - `src/lib/env.ts` é a única porta de entrada para variáveis de ambiente; nunca ler `process.env` direto em outro lugar.
+- `src/instrumentation.ts` valida o env quando o servidor sobe: sem `API_BASE_URL` válida, o log mostra `Configuração inválida` e toda requisição responde 500, em vez de o CMS parecer funcionar. Em Server Actions, só `ApiError` vira mensagem de formulário; qualquer outro erro é registrado no log do servidor e propagado para a fronteira de erro.
 - Next 16 renomeou `middleware.ts` para `proxy.ts` (export `proxy`, não `middleware`). Ver `node_modules/next/dist/docs/01-app/03-api-reference/03-file-conventions/proxy.md`.
 - Antes de usar qualquer convenção do App Router que pareça familiar, confirme em `node_modules/next/dist/docs/` porque esta versão diverge do treinamento do modelo (cookies/params assíncronos, etc.).
