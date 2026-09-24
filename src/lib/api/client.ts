@@ -35,7 +35,9 @@ function extractMessage(body: unknown): string | null {
       return message;
     }
     if (Array.isArray(message)) {
-      const joined = message.filter((item): item is string => typeof item === "string").join(" ");
+      const joined = message
+        .filter((item): item is string => typeof item === "string")
+        .join(" ");
       return joined || null;
     }
   }
@@ -54,7 +56,8 @@ function extractCode(body: unknown): string | null {
 
 async function toApiError(response: Response): Promise<ApiError> {
   const body: unknown = await response.json().catch(() => undefined);
-  const message = extractMessage(body) ?? response.statusText ?? "Erro inesperado.";
+  const message =
+    extractMessage(body) ?? response.statusText ?? "Erro inesperado.";
   const code = extractCode(body);
   return new ApiError(response.status, message, code);
 }
@@ -128,7 +131,9 @@ export async function authedRequest<T>(
 
 const BASE_PATH = "/cms/trilha";
 
-function buildQuery(query: Record<string, string | number | undefined>): string {
+function buildQuery(
+  query: Record<string, string | number | undefined>,
+): string {
   const params = new URLSearchParams();
   for (const [key, value] of Object.entries(query)) {
     if (value !== undefined) {
@@ -140,7 +145,8 @@ function buildQuery(query: Record<string, string | number | undefined>): string 
 }
 
 export const cmsApi = {
-  access: (): Promise<CmsAccess> => authedRequest(`${BASE_PATH}/acesso`, cmsAccessSchema),
+  access: (): Promise<CmsAccess> =>
+    authedRequest(`${BASE_PATH}/acesso`, cmsAccessSchema),
 
   pillars: (): Promise<CmsPillar[]> =>
     authedRequest(`${BASE_PATH}/pilares`, z.array(cmsPillarSchema)),
@@ -181,7 +187,8 @@ export const cmsApi = {
 
   transition: (
     id: string,
-    action: "submeter" | "publicar" | "despublicar" | "arquivar",
+    action:
+      "submeter" | "publicar" | "despublicar" | "arquivar" | "desarquivar",
   ): Promise<CmsTraining> =>
     authedRequest(`${BASE_PATH}/treinos/${id}/${action}`, cmsTrainingSchema, {
       method: "POST",
@@ -215,10 +222,14 @@ export const cmsApi = {
     ),
 
   confirmVideo: (id: string, key: string): Promise<CmsTraining> =>
-    authedRequest(`${BASE_PATH}/treinos/${id}/video/confirmar`, cmsTrainingSchema, {
-      method: "POST",
-      body: { key },
-    }),
+    authedRequest(
+      `${BASE_PATH}/treinos/${id}/video/confirmar`,
+      cmsTrainingSchema,
+      {
+        method: "POST",
+        body: { key },
+      },
+    ),
 
   removeVideo: (id: string): Promise<CmsTraining> =>
     authedRequest(`${BASE_PATH}/treinos/${id}/video`, cmsTrainingSchema, {

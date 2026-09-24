@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { ACTION_LABELS, PILLAR_ORDER, STATUS_LABELS, formatDate } from "./labels";
+import {
+  ACTION_LABELS,
+  PILLAR_ORDER,
+  STATUS_LABELS,
+  formatDate,
+} from "./labels";
 
 describe("labels", () => {
   it("traduz todos os status de treino", () => {
@@ -21,6 +26,7 @@ describe("labels", () => {
         "published",
         "unpublished",
         "archived",
+        "unarchived",
         "reordered",
         "video_attached",
         "video_removed",

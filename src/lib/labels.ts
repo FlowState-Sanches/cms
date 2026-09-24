@@ -20,10 +20,16 @@ export const ACTION_LABELS: Record<EventAction, string> = {
   reordered: "Reordenado",
   video_attached: "Vídeo anexado",
   video_removed: "Vídeo removido",
+  unarchived: "Desarquivado",
 };
 
 /** Ordem fixa de exibição dos pilares nas abas da lista. */
-export const PILLAR_ORDER: PillarKey[] = ["tecnico", "fisico", "psiquico", "flow"];
+export const PILLAR_ORDER: PillarKey[] = [
+  "tecnico",
+  "fisico",
+  "psiquico",
+  "flow",
+];
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
   day: "2-digit",

@@ -67,7 +67,7 @@ describe("StatusActions: botões por status e papel", () => {
     ],
     ["admin", admin, "review", "prof", ["Publicar", "Devolver", "Arquivar"]],
     ["admin", admin, "published", "prof", ["Despublicar", "Arquivar"]],
-    ["admin", admin, "archived", "prof", []],
+    ["admin", admin, "archived", "prof", ["Desarquivar"]],
   ])("%s em %s", (_role, access, status, authorId, expected) => {
     render(
       <StatusActions training={training(status, authorId)} access={access} />,
@@ -164,6 +164,7 @@ describe("StatusActions: interações", () => {
     await user.click(screen.getByRole("button", { name: "Arquivar" }));
     const dialog = screen.getByRole("dialog", { name: "Arquivar treino" });
     expect(dialog).toHaveTextContent("sai do app");
+    expect(dialog).not.toHaveTextContent("Não há como desarquivar");
     expect(actions.transitionAction).not.toHaveBeenCalled();
 
     await user.click(within(dialog).getByRole("button", { name: "Cancelar" }));
@@ -178,6 +179,27 @@ describe("StatusActions: interações", () => {
       expect(actions.transitionAction).toHaveBeenCalledWith(
         "tecnico-t1",
         "arquivar",
+      ),
+    );
+  });
+
+  it("Desarquivar pede confirmação e volta o treino como rascunho", async () => {
+    actions.transitionAction.mockResolvedValue({ ok: true, id: "tecnico-t1" });
+    const user = userEvent.setup();
+    render(<StatusActions training={training("archived")} access={admin} />);
+
+    await user.click(screen.getByRole("button", { name: "Desarquivar" }));
+    const dialog = screen.getByRole("dialog", { name: "Desarquivar treino" });
+    expect(dialog).toHaveTextContent("volta como rascunho");
+    expect(actions.transitionAction).not.toHaveBeenCalled();
+
+    await user.click(
+      within(dialog).getByRole("button", { name: "Confirmar desarquivamento" }),
+    );
+    await waitFor(() =>
+      expect(actions.transitionAction).toHaveBeenCalledWith(
+        "tecnico-t1",
+        "desarquivar",
       ),
     );
   });
