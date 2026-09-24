@@ -27,13 +27,13 @@ O CMS não acessa banco nem regra de negócio. Toda autorização e transição 
 - Guarda o access token JWT em cookie `fs_cms_session` (`httpOnly`, `sameSite=lax`, `secure` em produção, `path=/`).
 - Chama a API só a partir do servidor (Server Components e Server Actions), nunca do cliente.
 - Reenvia `Authorization: Bearer <token>` nessas chamadas.
-- Ao receber 401 da API, apaga o cookie e redireciona a `/login`.
+- Ao receber 401 da API, redireciona a `/sessao-expirada` (Route Handler que apaga o cookie e manda a `/login?expirada=1`). O cookie não é apagado direto no ponto do 401 porque o Next 16 só permite alterar cookies em Server Actions e Route Handlers, e a chamada pode vir de um Server Component durante o render.
 
 **Regra inegociável: o token nunca chega ao JavaScript do navegador.** Qualquer código novo que precise do token roda no servidor.
 
 ## Decisões (D1..D6)
 
-Ver lista em `README.md` (seção "Decisões de design"), fonte única para não divergir. Spec completo em `docs/superpowers/specs/2026-09-23-cms-trilha-design.md` no repo `app`.
+Ver lista em `README.md` (seção "Decisões de design"), fonte única para não divergir. Spec completo em `FlowState/docs/superpowers/specs/2026-09-23-cms-trilha-design.md` (pasta `docs` ao lado dos repos `api`, `app` e `cms`, fora deles).
 
 ## E2E (Playwright)
 

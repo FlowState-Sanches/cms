@@ -47,7 +47,7 @@ Navegador ──PUT pré-assinado──────> S3 privado
 
 O CMS não acessa banco nem regra de negócio diretamente. Toda autorização e regra de transição de status vive na API (fonte única para app e CMS). O CMS só monta a tela, valida formulário no cliente com o mesmo schema Zod do DTO, chama a API pelo servidor e guarda sessão em cookie.
 
-**Regra fixa: o token de acesso nunca chega ao JavaScript do navegador.** Ele fica em cookie `fs_cms_session` (`httpOnly`, `sameSite=lax`, `secure` em produção, `path=/`), lido só em Server Components e Server Actions. Se a API responder 401, o cookie é apagado e o usuário volta para `/login`.
+**Regra fixa: o token de acesso nunca chega ao JavaScript do navegador.** Ele fica em cookie `fs_cms_session` (`httpOnly`, `sameSite=lax`, `secure` em produção, `path=/`), lido só em Server Components e Server Actions. Se a API responder 401, o usuário passa por `/sessao-expirada`, que apaga o cookie e o leva para `/login?expirada=1`.
 
 ## Decisões de design (D1..D6, do spec `2026-09-23-cms-trilha-design.md`)
 
