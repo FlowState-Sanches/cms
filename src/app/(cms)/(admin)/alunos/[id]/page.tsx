@@ -54,7 +54,7 @@ export default async function AlunoPage({ params }: { params: Promise<{ id: stri
         <h2 id="aluno-numeros" className="sr-only">
           Números do aluno
         </h2>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           <StatCard label="Aulas" value={student.lessonsCount} />
           <StatCard label="Inscrições em aulas em grupo e eventos" value={student.enrollmentsCount} />
           <StatCard label="Sessões em que aparece" value={student.taggedSessionsCount} />

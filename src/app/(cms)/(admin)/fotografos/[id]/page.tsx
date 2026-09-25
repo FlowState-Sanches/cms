@@ -54,14 +54,14 @@ export default async function FotografoPage({ params }: { params: Promise<{ id: 
         <h2 id="fotografo-numeros" className="sr-only">
           Números do fotógrafo
         </h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           <StatCard label="Sessões" value={photographer.sessionsCount} />
           <StatCard label="Fotos" value={photographer.photosCount} />
           <StatCard label="Vídeos" value={photographer.videosCount} />
         </div>
         <Link
           href={hrefWith("/midias", { fotografo: photographer.id })}
-          className="self-start text-sm text-primary underline-offset-2 hover:underline"
+          className="inline-flex min-h-11 items-center self-start text-sm text-primary underline-offset-2 hover:underline lg:min-h-0"
         >
           Ver todas as mídias
         </Link>

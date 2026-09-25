@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "Painel | FlowState CMS",
 };
 
-const GRID = "grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6";
+const GRID = "grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6";
 const SECTION_TITLE = "font-display text-base font-semibold text-text";
 
 /**

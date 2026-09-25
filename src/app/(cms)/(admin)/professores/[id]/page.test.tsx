@@ -60,6 +60,15 @@ describe("ProfessorPage", () => {
     expect(screen.getByText("Florianópolis")).toBeInTheDocument();
     expect(screen.getByText("Longboard, Iniciantes")).toBeInTheDocument();
     expect(screen.getByText("Nota média 4,8")).toBeInTheDocument();
+    expect(screen.getByText("Aulas em grupo e eventos").parentElement?.parentElement).toHaveClass(
+      "grid-cols-1",
+      "md:grid-cols-2",
+      "lg:grid-cols-4",
+    );
+    expect(screen.getByRole("button", { name: "Bloquear" }).parentElement).toHaveClass(
+      "flex-col",
+      "md:flex-row",
+    );
   });
 
   it("professor sem perfil salvo mostra os campos como não informados", async () => {
