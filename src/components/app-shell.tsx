@@ -8,6 +8,21 @@ type AppShellProps = {
   children: ReactNode;
 };
 
+type NavItem = { href: string; label: string; showsReviewCount?: boolean };
+
+const PROFESSOR_NAV: NavItem[] = [{ href: "/treinos", label: "Treinos" }];
+
+const ADMIN_NAV: NavItem[] = [
+  { href: "/painel", label: "Painel" },
+  { href: "/treinos", label: "Treinos" },
+  { href: "/revisao", label: "Fila de revisão", showsReviewCount: true },
+  { href: "/professores", label: "Professores" },
+  { href: "/alunos", label: "Alunos" },
+  { href: "/fotografos", label: "Fotógrafos" },
+  { href: "/admins", label: "Admins" },
+  { href: "/midias", label: "Mídias" },
+];
+
 /**
  * Shell autenticado do CMS: skip link, navegação principal e identificação
  * do usuário logado. Server Component; o logout é um form POST para
@@ -26,19 +41,18 @@ export function AppShell({ access, reviewCount, children }: AppShellProps) {
         Pular para o conteúdo
       </a>
 
-      <header className="flex items-center justify-between gap-4 border-b border-border px-6 py-4">
-        <div className="flex items-center gap-6">
+      <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border px-6 py-4">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
           <span className="font-display text-lg font-semibold text-text">FlowState CMS</span>
-          <nav aria-label="Principal" className="flex items-center gap-4 text-sm">
-            <Link href="/treinos" className="text-text hover:text-primary">
-              Treinos
-            </Link>
-            {access.canCurate && (
-              <Link href="/revisao" className="text-text hover:text-primary">
-                Fila de revisão
-                <span className="ml-1.5 text-xs text-text-muted">{reviewCount}</span>
+          <nav aria-label="Principal" className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+            {(access.canCurate ? ADMIN_NAV : PROFESSOR_NAV).map((item) => (
+              <Link key={item.href} href={item.href} className="text-text hover:text-primary">
+                {item.label}
+                {item.showsReviewCount && (
+                  <span className="ml-1.5 text-xs text-text-muted">{reviewCount}</span>
+                )}
               </Link>
-            )}
+            ))}
           </nav>
         </div>
 

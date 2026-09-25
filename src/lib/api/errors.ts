@@ -25,6 +25,20 @@ export const ERROR_MESSAGES: Record<string, string> = {
   INVALID_VIDEO: "Vídeo inválido. Confira o formato e o tamanho do arquivo.",
   VIDEO_NOT_FOUND: "Vídeo não encontrado.",
   STORAGE_NOT_CONFIGURED: "Armazenamento de vídeo não está configurado.",
+  // Gestão operacional (spec 2026-09-24-cms-gestao-design.md §4.4)
+  ACCOUNT_BLOCKED: "Conta bloqueada. Fale com o suporte FlowState.",
+  CANNOT_TARGET_SELF: "Você não pode aplicar esta ação à sua própria conta.",
+  ADMIN_BLOCK_FORBIDDEN:
+    "Admins não podem ser bloqueados. Revogue o acesso de admin antes.",
+  LAST_ADMIN: "Não é possível revogar o último admin do CMS.",
+  ALREADY_ADMIN: "Esta conta já é admin.",
+  USER_NOT_FOUND: "Conta não encontrada. Ela pode ter sido excluída.",
+  NOT_A_PROFESSOR: "Esta conta não tem o papel de professor.",
+  MEDIA_HAS_PAID_ORDERS: "Esta mídia tem pedido pago e não pode ser removida.",
+  CALENDAR_RANGE_INVALID: "Período do calendário inválido. Escolha um mês válido.",
+  // Acrescentados pelo plano da API (fora da tabela §4.4 da spec)
+  USER_BLOCKED: "Conta bloqueada não pode virar admin. Desbloqueie antes.",
+  MEDIA_NOT_FOUND: "Mídia não encontrada. Ela pode ter sido removida.",
 };
 
 const DEFAULT_MESSAGE = "Não foi possível concluir. Tente de novo.";

@@ -12,13 +12,9 @@ export function proxy(request: NextRequest) {
 
   const hasSession = request.cookies.has(SESSION_COOKIE);
 
-  if (pathname === "/") {
-    return NextResponse.redirect(new URL("/treinos", request.url));
-  }
-
   if (pathname === "/login") {
     if (hasSession) {
-      return NextResponse.redirect(new URL("/treinos", request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
     return NextResponse.next();
   }

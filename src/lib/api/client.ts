@@ -4,6 +4,7 @@ import { z } from "zod";
 import { env } from "../env";
 import { getSessionToken } from "../session";
 import { ApiError } from "./errors";
+import { buildQuery } from "./query";
 import {
   cmsAccessSchema,
   cmsPillarSchema,
@@ -130,19 +131,6 @@ export async function authedRequest<T>(
 }
 
 const BASE_PATH = "/cms/trilha";
-
-function buildQuery(
-  query: Record<string, string | number | undefined>,
-): string {
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(query)) {
-    if (value !== undefined) {
-      params.set(key, String(value));
-    }
-  }
-  const qs = params.toString();
-  return qs ? `?${qs}` : "";
-}
 
 export const cmsApi = {
   access: (): Promise<CmsAccess> =>

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CmsAccess, TrainingStatus } from "./api/schemas";
-import { availableStatusActions, canEditTraining } from "./permissions";
+import { availableStatusActions, canEditTraining, homePathFor } from "./permissions";
 
 const professor: CmsAccess = {
   canEdit: true,
@@ -76,5 +76,12 @@ describe("availableStatusActions", () => {
     expect(
       availableStatusActions({ ...training("draft"), author: null }, professor),
     ).toEqual([]);
+  });
+});
+
+describe("homePathFor", () => {
+  it("curadoria vai para o painel e professor para os treinos", () => {
+    expect(homePathFor(admin)).toBe("/painel");
+    expect(homePathFor(professor)).toBe("/treinos");
   });
 });

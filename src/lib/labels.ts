@@ -38,7 +38,25 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
   timeZone: "UTC",
 });
 
+const TIMESTAMP_FORMATTER = new Intl.DateTimeFormat("pt-BR", {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  timeZone: "America/Sao_Paulo",
+});
+
 /** Formata uma data ISO (UTC) no padrão pt-BR `dd/mm/aaaa`. */
 export function formatDate(isoDate: string): string {
   return DATE_FORMATTER.format(new Date(isoDate));
+}
+
+/**
+ * Formata um timestamp ISO no fuso `America/Sao_Paulo` (H6), padrão pt-BR
+ * `dd/mm/aaaa hh:mm`. Usar para timestamps reais (`createdAt`, admin desde),
+ * nunca para datas de relógio de parede (`formatDate` continua para essas).
+ */
+export function formatTimestamp(isoTimestamp: string): string {
+  return TIMESTAMP_FORMATTER.format(new Date(isoTimestamp)).replace(", ", " ");
 }

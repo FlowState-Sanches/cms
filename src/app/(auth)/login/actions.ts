@@ -5,6 +5,7 @@ import { z } from "zod";
 import { apiRequest } from "@/lib/api/client";
 import { ApiError, messageFor } from "@/lib/api/errors";
 import { cmsAccessSchema, loginResponseSchema } from "@/lib/api/schemas";
+import { homePathFor } from "@/lib/permissions";
 import { clearSession, setSession } from "@/lib/session";
 
 const loginInputSchema = z.object({
@@ -56,6 +57,7 @@ export async function loginAction(
 
   await setSession(accessToken);
 
+  let home: "/painel" | "/treinos";
   try {
     const access = await apiRequest("/cms/trilha/acesso", cmsAccessSchema, {
       token: accessToken,
@@ -68,11 +70,12 @@ export async function loginAction(
           "Sua conta não tem acesso ao CMS da Trilha. Fale com a curadoria FlowState.",
       };
     }
+    home = homePathFor(access);
   } catch (error) {
     await clearSession();
     rethrowUnlessApiError(error);
     return { error: messageFor(error) };
   }
 
-  redirect("/treinos");
+  redirect(home);
 }
