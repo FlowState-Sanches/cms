@@ -22,7 +22,7 @@ npm run dev -- -p 3001   # a API usa a porta 3000
 
 ## Arquitetura: BFF fino sobre a API
 
-O CMS não acessa banco nem regra de negócio. Toda autorização e transição de status de treino vivem na API NestJS (`/api/v1/cms/trilha/*`), fonte única para app e CMS. O CMS:
+O CMS não acessa banco nem regra de negócio. Toda autorização e regra de negócio vivem na API NestJS (`/api/v1/cms/trilha/*` para treinos, `/api/v1/cms/*` para a gestão operacional), fonte única para app e CMS. O CMS:
 
 - Guarda o access token JWT em cookie `fs_cms_session` (`httpOnly`, `sameSite=lax`, `secure` em produção, `path=/`).
 - Chama a API só a partir do servidor (Server Components e Server Actions), nunca do cliente.
@@ -34,6 +34,8 @@ O CMS não acessa banco nem regra de negócio. Toda autorização e transição 
 ## Decisões (D1..D6)
 
 Ver lista em `README.md` (seção "Decisões de design"), fonte única para não divergir. Spec completo em `FlowState/docs/superpowers/specs/2026-09-23-cms-trilha-design.md` (pasta `docs` ao lado dos repos `api`, `app` e `cms`, fora deles).
+
+Gestão operacional (painel, pessoas, admins, mídias): spec `FlowState/docs/superpowers/specs/2026-09-24-cms-gestao-design.md` (decisões G1..G4 e H1..H6). Rotas no grupo `src/app/(cms)/(admin)/`; cada página chama `isCurator()` antes de buscar dados.
 
 ## E2E (Playwright)
 
