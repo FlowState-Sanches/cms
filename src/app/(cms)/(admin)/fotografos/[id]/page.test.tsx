@@ -58,6 +58,39 @@ describe("FotografoPage", () => {
     expect(
       within(table).getByRole("link", { name: "Ver mídias da sessão em Joaquina" }),
     ).toHaveAttribute("href", `/midias?dia=2026-09-24&fotografo=${ID}`);
+
+    const [card] = within(screen.getByRole("list", { name: "Sessões recentes" })).getAllByRole(
+      "listitem",
+    );
+    expect(card!.firstElementChild).toHaveTextContent(/^Joaquina$/);
+    expect(
+      within(card!).getByRole("link", { name: "Ver mídias da sessão em Joaquina" }),
+    ).toBeInTheDocument();
+  });
+
+  it("'Ver mídias' é um alvo de toque de 44 px no cartão (Finding 4)", async () => {
+    mocks.adminApi.photographer.mockResolvedValue({
+      id: ID,
+      name: "Carla Foto",
+      email: "carla@x.test",
+      blocked: true,
+      sessionsCount: 4,
+      photosCount: 1200,
+      videosCount: 8,
+      createdAt: "2026-09-01T12:00:00.000Z",
+      recentSessions: [
+        { id: "s1", location: "Joaquina", sessionDate: "2026-09-24", photoCount: 40, videoCount: 2 },
+      ],
+    });
+    render(await FotografoPage({ params: Promise.resolve({ id: ID }) }));
+
+    const [card] = within(screen.getByRole("list", { name: "Sessões recentes" })).getAllByRole(
+      "listitem",
+    );
+    const link = within(card!).getByRole("link", {
+      name: "Ver mídias da sessão em Joaquina",
+    });
+    expect(link).toHaveClass("inline-flex", "min-h-11", "items-center");
   });
 
   it("id fora do formato vira 404", async () => {

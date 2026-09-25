@@ -49,4 +49,14 @@ describe("VerifyToggle", () => {
 
     await waitFor(() => expect(actions.setVerifiedAction).toHaveBeenCalledWith(ID, false));
   });
+
+  it("pendente: Verificar professor ocupa a largura toda no celular", () => {
+    render(<VerifyToggle professorId={ID} name="Ana" verified={false} />);
+    expect(screen.getByRole("button", { name: "Verificar professor" })).toHaveClass(
+      "min-h-11",
+      "w-full",
+      "md:w-auto",
+      "lg:min-h-0",
+    );
+  });
 });

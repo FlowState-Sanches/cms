@@ -37,4 +37,20 @@ describe("MediaPreview", () => {
     render(<MediaPreview media={{ type: "photo", url: null, thumbnailUrl: null, session }} />);
     expect(screen.getByText("Arquivo indisponível para pré-visualização.")).toBeInTheDocument();
   });
+
+  it("foto e vídeo nunca passam da largura do contêiner", () => {
+    const { unmount } = render(
+      <MediaPreview media={{ type: "photo", url: "https://s3.test/foto", thumbnailUrl: null, session }} />,
+    );
+    expect(screen.getByRole("img")).toHaveClass("h-auto", "w-full", "max-w-full");
+    unmount();
+    render(
+      <MediaPreview media={{ type: "video", url: "https://s3.test/video", thumbnailUrl: null, session }} />,
+    );
+    expect(screen.getByLabelText("Vídeo da sessão em Praia Mole, 24/09/2026")).toHaveClass(
+      "h-auto",
+      "w-full",
+      "max-w-full",
+    );
+  });
 });

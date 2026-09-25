@@ -51,11 +51,11 @@ export default async function OrdemPilarPage({
       <div className="flex flex-col gap-1">
         <Link
           href={`/treinos?pilar=${pillar}`}
-          className="text-sm text-text-muted hover:text-text"
+          className="inline-flex min-h-11 items-center self-start text-sm text-text-muted hover:text-text lg:min-h-0"
         >
           Voltar para treinos
         </Link>
-        <h1 className="font-display text-xl font-semibold text-text">
+        <h1 className="font-display text-xl font-semibold text-text wrap-anywhere">
           Reordenar pilar: {pillarLabel}
         </h1>
         <p className="text-sm text-text-muted">

@@ -9,7 +9,7 @@ type StatCardProps = {
   href?: string;
 };
 
-const CARD = "flex flex-col gap-1 rounded-md border border-border bg-surface px-4 py-3";
+const CARD = "flex min-w-0 flex-col gap-1 rounded-md border border-border bg-surface px-4 py-3";
 
 /** Número de resumo do painel e dos detalhes. Server Component. */
 export function StatCard({ label, value, detail, href }: StatCardProps) {

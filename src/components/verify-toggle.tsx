@@ -43,13 +43,13 @@ export function VerifyToggle({ professorId, name, verified }: VerifyToggleProps)
   }
 
   return (
-    <div className="flex flex-col items-start gap-1">
+    <div className="flex w-full flex-col items-stretch gap-1 md:w-auto md:items-start">
       <button
         type="button"
         onClick={verify}
         disabled={pending}
         aria-busy={pending || undefined}
-        className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-background disabled:opacity-60"
+        className="min-h-11 w-full rounded-md bg-primary px-3 py-2 text-sm font-medium text-background disabled:opacity-60 md:w-auto lg:min-h-0"
       >
         Verificar professor
       </button>

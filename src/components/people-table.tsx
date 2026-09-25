@@ -1,7 +1,7 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { formatTimestamp } from "@/lib/labels";
 import { PersonStatusBadge } from "./pill";
+import { ResponsiveList, type ListColumn } from "./responsive-list";
 
 export type PersonRow = {
   id: string;
@@ -11,7 +11,8 @@ export type PersonRow = {
   createdAt: string;
 };
 
-export type PeopleColumn<T> = { header: string; cell: (item: T) => ReactNode };
+/** Coluna extra de uma lista de pessoas: rótulo e render (formato de `ListColumn`). */
+export type PeopleColumn<T> = ListColumn<T>;
 
 type PeopleTableProps<T extends PersonRow> = {
   label: string;
@@ -21,10 +22,10 @@ type PeopleTableProps<T extends PersonRow> = {
   columns?: PeopleColumn<T>[];
 };
 
-const TH = "px-3 py-2 font-medium";
-const TD = "px-3 py-2";
-
-/** Tabela de professores, alunos ou fotógrafos. Server Component. */
+/**
+ * Professores, alunos ou fotógrafos: tabela a partir de 768 px e cartões
+ * abaixo, com o nome como link (spec 5.2). Server Component.
+ */
 export function PeopleTable<T extends PersonRow>({
   label,
   items,
@@ -32,60 +33,30 @@ export function PeopleTable<T extends PersonRow>({
   columns = [],
 }: PeopleTableProps<T>) {
   return (
-    <div
-      role="region"
-      aria-label={label}
-      tabIndex={0}
-      className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-    >
-      <table className="w-full min-w-[720px] border-collapse text-left text-sm">
-        <caption className="sr-only">{label}</caption>
-        <thead>
-          <tr className="border-b border-border text-xs uppercase tracking-wide text-text-muted">
-            <th scope="col" className={TH}>
-              Nome
-            </th>
-            <th scope="col" className={TH}>
-              E-mail
-            </th>
-            {columns.map((column) => (
-              <th key={column.header} scope="col" className={TH}>
-                {column.header}
-              </th>
-            ))}
-            <th scope="col" className={TH}>
-              Status
-            </th>
-            <th scope="col" className={TH}>
-              Cadastro
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((item) => (
-            <tr key={item.id} className="border-b border-border/60">
-              <td className={TD}>
-                <Link
-                  href={hrefFor(item)}
-                  className="font-medium text-text underline-offset-2 hover:underline focus-visible:underline"
-                >
-                  {item.name}
-                </Link>
-              </td>
-              <td className={`${TD} text-text-muted`}>{item.email}</td>
-              {columns.map((column) => (
-                <td key={column.header} className={`${TD} text-text-muted`}>
-                  {column.cell(item)}
-                </td>
-              ))}
-              <td className={TD}>
-                <PersonStatusBadge blocked={item.blocked} />
-              </td>
-              <td className={`${TD} text-text-muted`}>{formatTimestamp(item.createdAt)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <ResponsiveList
+      label={label}
+      caption={label}
+      items={items}
+      itemKey={(item) => item.id}
+      tableMinWidth="min-w-[720px]"
+      columns={[
+        {
+          header: "Nome",
+          primary: true,
+          cell: (item) => (
+            <Link
+              href={hrefFor(item)}
+              className="font-medium text-text underline-offset-2 hover:underline focus-visible:underline"
+            >
+              {item.name}
+            </Link>
+          ),
+        },
+        { header: "E-mail", cell: (item) => item.email },
+        ...columns,
+        { header: "Status", cell: (item) => <PersonStatusBadge blocked={item.blocked} /> },
+        { header: "Cadastro", cell: (item) => formatTimestamp(item.createdAt) },
+      ]}
+    />
   );
 }

@@ -16,11 +16,11 @@ type ReorderListProps = {
 type SaveStatus = { kind: "success" | "error"; message: string };
 
 const MOVE_BUTTON =
-  "rounded-md border border-border px-2 py-1 text-xs text-text hover:border-primary disabled:opacity-40";
+  "min-h-11 min-w-11 w-full rounded-md border border-border px-2 py-1 text-xs text-text wrap-anywhere hover:border-primary disabled:opacity-40 md:w-auto lg:min-h-0 lg:min-w-0";
 const PRIMARY_BUTTON =
-  "rounded-md bg-primary px-3 py-2 text-sm font-medium text-background disabled:opacity-60";
+  "min-h-11 w-full rounded-md bg-primary px-3 py-2 text-sm font-medium text-background disabled:opacity-60 md:w-auto lg:min-h-0";
 const SECONDARY_BUTTON =
-  "rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary disabled:opacity-60";
+  "min-h-11 w-full rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary disabled:opacity-60 md:w-auto lg:min-h-0";
 
 function sortByOrder(items: CmsTrainingListItem[]): CmsTrainingListItem[] {
   return [...items].sort((a, b) => a.order - b.order);
@@ -121,14 +121,14 @@ export function ReorderList({ pillar, items, onSave }: ReorderListProps) {
             key={item.id}
             tabIndex={0}
             onKeyDown={(event) => handleKeyDown(item.id, event)}
-            className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-border px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+            className="flex flex-col gap-3 rounded-md border border-border px-3 py-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary md:flex-row md:flex-wrap md:items-center md:justify-between"
           >
-            <div className="flex items-center gap-3">
-              <span className="w-6 text-sm text-text-muted">{index + 1}</span>
-              <span className="font-medium text-text">{item.title}</span>
+            <div className="flex min-w-0 flex-wrap items-center gap-3">
+              <span className="w-6 shrink-0 text-sm text-text-muted">{index + 1}</span>
+              <span className="min-w-0 font-medium text-text wrap-anywhere">{item.title}</span>
               <StatusBadge status={item.status} />
             </div>
-            <div className="flex gap-1">
+            <div className="flex flex-col gap-2 md:flex-row md:gap-1">
               {index > 0 && (
                 <button
                   type="button"
@@ -152,7 +152,7 @@ export function ReorderList({ pillar, items, onSave }: ReorderListProps) {
         ))}
       </ol>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
         <button
           type="button"
           className={PRIMARY_BUTTON}

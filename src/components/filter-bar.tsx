@@ -20,12 +20,13 @@ type FilterBarProps = {
 };
 
 const INPUT =
-  "rounded-md border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus-visible:border-primary";
+  "min-h-11 w-full min-w-0 rounded-md border border-border bg-surface px-3 py-2 text-sm text-text outline-none focus-visible:border-primary md:w-auto lg:min-h-0";
 
 /**
  * Filtros como `<form method="get">`: o estado vive na URL, funciona sem JS
  * e cada combinação é um link que se compartilha. `pagina` não é campo do
- * form, então filtrar volta para a página 1.
+ * form, então filtrar volta para a página 1. Abaixo de 768 px os campos e o
+ * botão Filtrar ocupam a largura toda (spec 5.5).
  */
 export function FilterBar({ label, action, fields }: FilterBarProps) {
   return (
@@ -34,7 +35,7 @@ export function FilterBar({ label, action, fields }: FilterBarProps) {
       action={action}
       role="search"
       aria-label={label}
-      className="flex flex-wrap items-end gap-3"
+      className="flex flex-col gap-3 md:flex-row md:flex-wrap md:items-end"
     >
       {fields.map((field) => {
         if (field.kind === "hidden") {
@@ -72,11 +73,14 @@ export function FilterBar({ label, action, fields }: FilterBarProps) {
       })}
       <button
         type="submit"
-        className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-background"
+        className="min-h-11 w-full rounded-md bg-primary px-3 py-2 text-sm font-medium text-background md:w-auto lg:min-h-0"
       >
         Filtrar
       </button>
-      <Link href={action} className="px-1 py-2 text-sm text-text-muted hover:text-text">
+      <Link
+        href={action}
+        className="inline-flex min-h-11 items-center justify-center px-1 py-2 text-sm text-text-muted hover:text-text md:justify-start lg:min-h-0"
+      >
         Limpar filtros
       </Link>
     </form>

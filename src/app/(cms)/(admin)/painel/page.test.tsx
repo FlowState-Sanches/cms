@@ -69,6 +69,12 @@ describe("PainelPage", () => {
       "/painel?mes=2026-08",
     );
     expect(screen.getByText("Nada agendado neste dia.")).toBeInTheDocument();
+    expect(within(people).getByRole("link", { name: /Alunos/ }).parentElement).toHaveClass(
+      "grid-cols-1",
+      "md:grid-cols-2",
+      "lg:grid-cols-3",
+      "xl:grid-cols-6",
+    );
   });
 
   it("parâmetros inválidos caem no mês de hoje sem quebrar", async () => {

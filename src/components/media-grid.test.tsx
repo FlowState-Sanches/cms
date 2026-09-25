@@ -29,4 +29,11 @@ describe("MediaGrid", () => {
     expect(screen.getByText("Sem miniatura")).toBeInTheDocument();
     expect(screen.getByText("Carla Foto")).toBeInTheDocument();
   });
+
+  it("2 colunas no celular, 3 no tablet e 4 no desktop", () => {
+    render(<MediaGrid items={[item]} />);
+    const list = screen.getByRole("list", { name: "Mídias" });
+    expect(list).toHaveClass("grid-cols-2", "md:grid-cols-3", "lg:grid-cols-4");
+    expect(list).not.toHaveClass("sm:grid-cols-3");
+  });
 });

@@ -78,4 +78,16 @@ describe("DayAgenda", () => {
     );
     expect(screen.getByText("Nada agendado neste dia.")).toBeInTheDocument();
   });
+
+  it("no celular textos longos quebram e o atalho Ver mídias tem alvo de 44 px", () => {
+    render(<DayAgenda day={day} />);
+    expect(screen.getByRole("link", { name: "Ver mídias da sessão em Joaquina" })).toHaveClass(
+      "min-h-11",
+      "lg:min-h-0",
+    );
+    expect(screen.getByRole("link", { name: "Bruno Aluno" }).closest("li")).toHaveClass(
+      "min-w-0",
+      "wrap-anywhere",
+    );
+  });
 });

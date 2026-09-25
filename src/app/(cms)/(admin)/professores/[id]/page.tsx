@@ -67,7 +67,7 @@ export default async function ProfessorPage({
         <h2 id="professor-numeros" className="sr-only">
           Números do professor
         </h2>
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Aulas" value={professor.lessonsCount} />
           <StatCard label="Próximas aulas" value={professor.upcomingLessons} />
           <StatCard label="Aulas em grupo e eventos" value={professor.groupEventsCount} />
@@ -83,17 +83,21 @@ export default async function ProfessorPage({
         <h2 id="professor-perfil" className="font-display text-base font-semibold text-text">
           Perfil
         </h2>
-        <dl className="grid gap-3 text-sm sm:grid-cols-[10rem_1fr]">
+        <dl className="grid gap-3 text-sm md:grid-cols-[10rem_minmax(0,1fr)]">
           <dt className="text-text-muted">Localização</dt>
-          <dd className="text-text">{professor.profile?.location ?? "Não informada"}</dd>
+          <dd className="min-w-0 text-text wrap-anywhere">
+            {professor.profile?.location ?? "Não informada"}
+          </dd>
           <dt className="text-text-muted">Especialidades</dt>
-          <dd className="text-text">
+          <dd className="min-w-0 text-text wrap-anywhere">
             {professor.profile && professor.profile.specialties.length > 0
               ? professor.profile.specialties.join(", ")
               : "Nenhuma"}
           </dd>
           <dt className="text-text-muted">Bio</dt>
-          <dd className="whitespace-pre-line text-text">{professor.profile?.bio ?? "Sem bio."}</dd>
+          <dd className="min-w-0 whitespace-pre-line text-text wrap-anywhere">
+            {professor.profile?.bio ?? "Sem bio."}
+          </dd>
         </dl>
       </section>
     </div>

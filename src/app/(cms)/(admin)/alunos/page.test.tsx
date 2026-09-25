@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -41,9 +41,10 @@ describe("AlunosPage", () => {
       page: 1,
       limit: 20,
     });
-    expect(screen.getByText("Pago")).toBeInTheDocument();
-    expect(screen.getByText("Bloqueado")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Bruno Aluno" })).toHaveAttribute(
+    const table = screen.getByRole("table", { name: "Alunos" });
+    expect(within(table).getByText("Pago")).toBeInTheDocument();
+    expect(within(table).getByText("Bloqueado")).toBeInTheDocument();
+    expect(within(table).getByRole("link", { name: "Bruno Aluno" })).toHaveAttribute(
       "href",
       `/alunos/${ID}`,
     );

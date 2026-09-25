@@ -33,9 +33,12 @@ const UPLOAD_FAILED_MESSAGE =
   "Não foi possível enviar o vídeo. Tente de novo.";
 
 const SECONDARY_BUTTON =
-  "rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary disabled:opacity-60";
+  "min-h-11 w-full rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary disabled:opacity-60 md:w-auto lg:min-h-0";
 const DANGER_BUTTON =
-  "rounded-md border border-danger/60 px-3 py-2 text-sm text-danger hover:bg-danger-soft disabled:opacity-60";
+  "min-h-11 w-full rounded-md border border-danger/60 px-3 py-2 text-sm text-danger hover:bg-danger-soft disabled:opacity-60 md:w-auto lg:min-h-0";
+/** Botão "escolher arquivo" em largura total e com 44 px no celular; no desktop, o visual atual. */
+const FILE_INPUT =
+  "w-full min-w-0 text-sm text-text-muted file:mr-3 file:min-h-11 file:w-full file:rounded-md file:border file:border-border file:bg-surface file:px-3 file:text-text md:file:w-auto lg:file:mr-1 lg:file:min-h-0 lg:file:rounded-none lg:file:border-0 lg:file:bg-transparent lg:file:px-0 lg:file:text-inherit";
 
 function isAcceptedType(
   type: string,
@@ -242,7 +245,7 @@ export function VideoUploader({
             accept={ACCEPTED_VIDEO_TYPES.join(",")}
             onChange={handleInputChange}
             aria-describedby={fileHintId}
-            className="text-sm text-text-muted"
+            className={FILE_INPUT}
           />
           <p id={fileHintId} className="text-xs text-text-muted">
             {`Formatos aceitos: MP4, MOV ou WEBM. Tamanho máximo: ${MAX_VIDEO_MB} MB.`}
@@ -263,7 +266,7 @@ export function VideoUploader({
                   {removeError}
                 </p>
               )}
-              <div className="flex gap-2">
+              <div className="flex flex-col gap-2 md:flex-row">
                 <button
                   type="button"
                   onClick={() => setConfirmingRemove(false)}

@@ -82,6 +82,18 @@ Como está montado:
 - Mutações são Server Actions com `revalidatePath`. Bloquear, revogar e remover pedem confirmação em `ConfirmAction`, que mostra a mensagem traduzida do `code` da API (`src/lib/api/errors.ts`).
 - Conta bloqueada tem o login recusado com "Conta bloqueada. Fale com o suporte FlowState." e a sessão aberta cai na requisição seguinte.
 
+## Layout responsivo (spec `2026-09-25-cms-responsivo-design.md`)
+
+Todo o CMS funciona no celular (360 a 430 px) e no tablet (768 a 1023 px) com as mesmas funções do desktop; a partir de 1024 px o visual é o de antes. Breakpoints do Tailwind, mobile-first: estilo base para o celular, `md:` (768 px) para tablet e `lg:` (1024 px) para desktop. Sem breakpoint customizado.
+
+- **Navegação**: abaixo de 1024 px o `AppShell` troca a barra por um menu recolhível (`MobileMenu`, um `<details>` nativo que abre sem JS e fecha ao navegar e com Esc), com os mesmos itens, o nome, o papel e o Sair. Os links vêm de `NavLinks`, Client Component só para ler o `pathname` e marcar `aria-current="page"`; o shell continua Server Component.
+- **Listas**: `ResponsiveList` renderiza a tabela (a partir de 768 px, numa região rolável e rotulada) e, abaixo de 768 px, cartões com o campo principal como título e os demais em `<dl>`. As duas versões vão no HTML e o CSS mostra uma; a escondida sai da árvore de acessibilidade. No Vitest (jsdom, sem CSS) as duas aparecem: escope as consultas com `within(screen.getByRole("table", { name }))` ou `within(screen.getByRole("list", { name }))`.
+- **Alvos de toque**: botões de ação, links de navegação, paginação e dias do calendário têm `min-h-11` (44 px) abaixo de 1024 px e voltam ao tamanho do desktop com `lg:min-h-0`.
+- **Texto longo**: nomes, e-mails e títulos usam `min-w-0 wrap-anywhere` para quebrar dentro do cartão em vez de alargar a página.
+- **Diálogos**: `w-[calc(100%-2rem)]`, rolagem interna e botões empilhados em largura total no celular, com a ação principal por último.
+
+O E2E `e2e/cms-responsivo.spec.ts` percorre as rotas de admin e de professor em 390 x 844 e 768 x 1024 (e painel, calendário e diálogo em 360 x 740) e falha se a página rolar na horizontal. Rota nova entra na lista de rotas desse spec.
+
 ## Variáveis de ambiente
 
 Ver `.env.example`. `API_BASE_URL` é obrigatória e validada com Zod na primeira leitura (`src/lib/env.ts`); ausência ou valor que não é URL derruba a aplicação com mensagem clara em vez de falhar silenciosamente depois.
@@ -104,3 +116,5 @@ O que o `globalSetup` faz antes dos testes:
 O cenário principal (professor cria e submete, admin publica) cria um treino de teste (código `E2E<sufixo>`) e o **arquiva ao final** via API, para não deixar debris na trilha local. Se a API local cair no meio da suíte, pode sobrar um treino de teste em `draft`/`review`/`published`; nesse caso, arquive manualmente pela tela do CMS ou por `POST /cms/trilha/treinos/:id/arquivar`.
 
 O cenário da gestão (`e2e/cms-gestao.spec.ts`) roda em série: painel, remover e devolver a verificação do professor (conferindo o catálogo `GET /professors`), bloquear e desbloquear o surfista (login com `ACCOUNT_BLOCKED` e `GET /auth/me` com 401), conceder e revogar admin, autorrevogação recusada e 403 do professor nas rotas de gestão. O `afterAll` desbloqueia o surfista, devolve a verificação ao professor e revoga o admin do surfista, para uma suíte interrompida não deixar estado torto.
+
+O cenário responsivo (`e2e/cms-responsivo.spec.ts`) só lê dados: usa os mesmos usuários do seed, abre o diálogo de bloqueio e cancela. Roda no chromium do projeto trocando o viewport (`test.use({ viewport })`), sem outro navegador.

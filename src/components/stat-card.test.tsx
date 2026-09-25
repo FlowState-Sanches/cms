@@ -17,4 +17,11 @@ describe("StatCard", () => {
       "/professores",
     );
   });
+
+  it("não força largura mínima dentro da grade", () => {
+    render(<StatCard label="Inscrições em aulas em grupo e eventos" value={2} />);
+    expect(screen.getByText("Inscrições em aulas em grupo e eventos").parentElement).toHaveClass(
+      "min-w-0",
+    );
+  });
 });

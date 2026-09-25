@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import type { CmsTrainingListItem } from "@/lib/api/schemas";
 import { TrainingTable } from "./training-table";
@@ -18,6 +18,16 @@ function makeItem(overrides: Partial<CmsTrainingListItem> = {}): CmsTrainingList
     publishedAt: "2026-08-01T12:00:00.000Z",
     ...overrides,
   };
+}
+
+function table(): HTMLElement {
+  return screen.getByRole("table", { name: "Lista de treinos do pilar selecionado" });
+}
+
+function cards(): HTMLElement[] {
+  return within(
+    screen.getByRole("list", { name: "Lista de treinos do pilar selecionado" }),
+  ).getAllByRole("listitem");
 }
 
 describe("TrainingTable", () => {
@@ -45,19 +55,48 @@ describe("TrainingTable", () => {
   it("linka cada linha para /treinos/<id>", () => {
     render(<TrainingTable items={[makeItem({ id: "tecnico-abc", title: "Fundamentos de passe" })]} />);
 
-    const link = screen.getByRole("link", { name: /Fundamentos de passe/ });
+    const link = within(table()).getByRole("link", { name: /Fundamentos de passe/ });
     expect(link).toHaveAttribute("href", "/treinos/tecnico-abc");
   });
 
   it("mostra 'FlowState' quando o autor é nulo", () => {
     render(<TrainingTable items={[makeItem({ author: null })]} />);
 
-    expect(screen.getByText("FlowState")).toBeInTheDocument();
+    expect(within(table()).getByText("FlowState")).toBeInTheDocument();
   });
 
   it("formata a data de atualização em pt-BR", () => {
     render(<TrainingTable items={[makeItem({ updatedAt: "2026-09-01T12:00:00.000Z" })]} />);
 
-    expect(screen.getByText("01/09/2026")).toBeInTheDocument();
+    expect(within(table()).getByText("01/09/2026")).toBeInTheDocument();
+  });
+
+  it("no celular o cartão tem o título como link e os demais campos rotulados", () => {
+    render(<TrainingTable items={[makeItem()]} />);
+
+    const [card] = cards();
+    expect(within(card!).getByRole("link", { name: "Fundamentos de passe" })).toHaveAttribute(
+      "href",
+      "/treinos/tecnico-abc",
+    );
+    expect(within(card!).getAllByRole("term").map((term) => term.textContent)).toEqual([
+      "Ordem",
+      "Código",
+      "Nível",
+      "Status",
+      "Autor",
+      "Atualizado",
+    ]);
+  });
+
+  it("título longo quebra dentro do cartão (Review Focus 3)", () => {
+    const longTitle = "Treino".repeat(20);
+    render(<TrainingTable items={[makeItem({ title: longTitle })]} />);
+
+    const [card] = cards();
+    expect(within(card!).getByRole("link", { name: longTitle }).parentElement).toHaveClass(
+      "min-w-0",
+      "wrap-anywhere",
+    );
   });
 });

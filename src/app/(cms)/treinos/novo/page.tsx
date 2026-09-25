@@ -30,7 +30,7 @@ export default async function NovoTreinoPage({
       <div className="flex flex-col gap-1">
         <Link
           href={`/treinos?pilar=${pillar}`}
-          className="text-sm text-text-muted hover:text-text"
+          className="inline-flex min-h-11 items-center self-start text-sm text-text-muted hover:text-text lg:min-h-0"
         >
           Voltar para treinos
         </Link>

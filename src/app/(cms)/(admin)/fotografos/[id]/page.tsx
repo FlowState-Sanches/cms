@@ -12,14 +12,12 @@ import { BlockToggle } from "@/components/block-toggle";
 import { EmptyState } from "@/components/empty-state";
 import { PersonHeader } from "@/components/person-header";
 import { PersonStatusBadge } from "@/components/pill";
+import { ResponsiveList } from "@/components/responsive-list";
 import { StatCard } from "@/components/stat-card";
 
 export const metadata: Metadata = {
   title: "Fotógrafo | FlowState CMS",
 };
-
-const TH = "px-3 py-2 font-medium";
-const TD = "px-3 py-2";
 
 export default async function FotografoPage({ params }: { params: Promise<{ id: string }> }) {
   if (!(await isCurator())) {
@@ -56,14 +54,14 @@ export default async function FotografoPage({ params }: { params: Promise<{ id: 
         <h2 id="fotografo-numeros" className="sr-only">
           Números do fotógrafo
         </h2>
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           <StatCard label="Sessões" value={photographer.sessionsCount} />
           <StatCard label="Fotos" value={photographer.photosCount} />
           <StatCard label="Vídeos" value={photographer.videosCount} />
         </div>
         <Link
           href={hrefWith("/midias", { fotografo: photographer.id })}
-          className="self-start text-sm text-primary underline-offset-2 hover:underline"
+          className="inline-flex min-h-11 items-center self-start text-sm text-primary underline-offset-2 hover:underline lg:min-h-0"
         >
           Ver todas as mídias
         </Link>
@@ -76,47 +74,38 @@ export default async function FotografoPage({ params }: { params: Promise<{ id: 
         {photographer.recentSessions.length === 0 ? (
           <EmptyState title="Nenhuma sessão registrada." />
         ) : (
-          <div
-            role="region"
-            aria-label="Sessões recentes do fotógrafo"
-            tabIndex={0}
-            className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-          >
-            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
-              <caption className="sr-only">Sessões recentes</caption>
-              <thead>
-                <tr className="border-b border-border text-xs uppercase tracking-wide text-text-muted">
-                  <th scope="col" className={TH}>Data</th>
-                  <th scope="col" className={TH}>Local</th>
-                  <th scope="col" className={TH}>Fotos</th>
-                  <th scope="col" className={TH}>Vídeos</th>
-                  <th scope="col" className={TH}>Mídias</th>
-                </tr>
-              </thead>
-              <tbody>
-                {photographer.recentSessions.map((session) => (
-                  <tr key={session.id} className="border-b border-border/60">
-                    <td className={`${TD} text-text-muted`}>{formatDate(session.sessionDate)}</td>
-                    <td className={TD}>{session.location}</td>
-                    <td className={`${TD} text-text-muted`}>{formatNumber(session.photoCount)}</td>
-                    <td className={`${TD} text-text-muted`}>{formatNumber(session.videoCount)}</td>
-                    <td className={TD}>
-                      <Link
-                        href={hrefWith("/midias", {
-                          dia: session.sessionDate,
-                          fotografo: photographer.id,
-                        })}
-                        aria-label={`Ver mídias da sessão em ${session.location}`}
-                        className="text-primary underline-offset-2 hover:underline"
-                      >
-                        Ver mídias
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ResponsiveList
+            label="Sessões recentes do fotógrafo"
+            caption="Sessões recentes"
+            items={photographer.recentSessions}
+            itemKey={(session) => session.id}
+            tableMinWidth="min-w-[560px]"
+            columns={[
+              { header: "Data", cell: (session) => formatDate(session.sessionDate) },
+              {
+                header: "Local",
+                primary: true,
+                cell: (session) => <span className="text-text">{session.location}</span>,
+              },
+              { header: "Fotos", cell: (session) => formatNumber(session.photoCount) },
+              { header: "Vídeos", cell: (session) => formatNumber(session.videoCount) },
+              {
+                header: "Mídias",
+                cell: (session) => (
+                  <Link
+                    href={hrefWith("/midias", {
+                      dia: session.sessionDate,
+                      fotografo: photographer.id,
+                    })}
+                    aria-label={`Ver mídias da sessão em ${session.location}`}
+                    className="inline-flex min-h-11 items-center text-primary underline-offset-2 hover:underline md:inline md:min-h-0"
+                  >
+                    Ver mídias
+                  </Link>
+                ),
+              },
+            ]}
+          />
         )}
       </section>
     </div>

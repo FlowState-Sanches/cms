@@ -19,7 +19,7 @@ export function MobilePreview({ values, demoVideoUrl }: MobilePreviewProps) {
   return (
     <section
       aria-label="Pré-visualização no app"
-      className="flex flex-col gap-3 rounded-2xl border border-border bg-background p-4"
+      className="mx-auto flex w-full max-w-sm flex-col gap-3 rounded-2xl border border-border bg-background p-4 lg:max-w-none"
     >
       <h2 className="font-display text-base font-semibold text-text">
         Pré-visualização no app
@@ -27,7 +27,7 @@ export function MobilePreview({ values, demoVideoUrl }: MobilePreviewProps) {
 
       <div className="flex flex-col gap-4 rounded-xl border border-border bg-surface p-4">
         <div className="flex flex-col gap-2">
-          <h3 className="font-display text-lg font-bold text-text">
+          <h3 className="font-display text-lg font-bold text-text wrap-anywhere">
             {values.title || "Título do treino"}
           </h3>
           <div className="flex items-center gap-2 text-xs text-text-muted">

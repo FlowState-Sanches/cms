@@ -14,7 +14,23 @@ const WEEKDAYS = [
 ] as const;
 
 const NAV_LINK =
-  "rounded-md border border-border px-3 py-1.5 text-text hover:border-primary";
+  "inline-flex min-h-11 items-center rounded-md border border-border px-3 py-1.5 text-text hover:border-primary lg:min-h-0";
+
+export type DayKind = "aulas" | "eventos" | "midias";
+
+const DAY_KINDS: DayKind[] = ["aulas", "eventos", "midias"];
+
+const DOT_CLASS: Record<DayKind, string> = {
+  aulas: "bg-primary",
+  eventos: "bg-accent",
+  midias: "bg-text-muted",
+};
+
+const KIND_LABEL: Record<DayKind, string> = {
+  aulas: "Aulas",
+  eventos: "Eventos",
+  midias: "Mídias",
+};
 
 /** Contadores visíveis de um dia: aulas (particulares + em grupo), eventos, mídias. */
 export function dayCounts(day: CalendarDay | undefined): string[] {
@@ -34,6 +50,24 @@ export function dayCounts(day: CalendarDay | undefined): string[] {
     parts.push(plural(media, "mídia", "mídias"));
   }
   return parts;
+}
+
+/** Tipos com atividade no dia, para os pontos do celular (spec 5.3). */
+export function dayKinds(day: CalendarDay | undefined): DayKind[] {
+  if (!day) {
+    return [];
+  }
+  const kinds: DayKind[] = [];
+  if (day.lessons + day.groupClasses > 0) {
+    kinds.push("aulas");
+  }
+  if (day.events > 0) {
+    kinds.push("eventos");
+  }
+  if (day.photos + day.videos > 0) {
+    kinds.push("midias");
+  }
+  return kinds;
 }
 
 /** "24 de setembro (hoje): 3 aulas, 1 evento, 42 mídias" (spec 5.3). */
@@ -60,7 +94,9 @@ type MonthCalendarProps = {
 /**
  * Grade mensal do painel. Server Component sem estado: cada dia é um link
  * que muda `?dia=` na URL. A tabela tem legenda e cabeçalho de dias para
- * leitor de tela; o dia selecionado leva `aria-current="date"`.
+ * leitor de tela; o dia selecionado leva `aria-current="date"`. Abaixo de
+ * 768 px a tabela perde a largura mínima e cada dia mostra só o número e
+ * pontos por tipo; o `aria-label` do dia continua com as contagens.
  */
 export function MonthCalendar({
   month,
@@ -99,7 +135,7 @@ export function MonthCalendar({
         tabIndex={0}
         className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
       >
-        <table className="w-full min-w-[560px] table-fixed border-collapse text-sm">
+        <table className="w-full table-fixed border-collapse text-sm md:min-w-[560px]">
           <caption className="sr-only">
             {`Calendário de ${title}: aulas, eventos e mídias por dia`}
           </caption>
@@ -125,20 +161,24 @@ export function MonthCalendar({
                     return (
                       <td
                         key={`vazio-${weekIndex}-${cellIndex}`}
-                        className="h-20 border border-border/40"
+                        className="h-12 border border-border/40 md:h-20"
                       />
                     );
                   }
                   const day = byDate.get(date);
+                  const kinds = dayKinds(day);
                   const isSelected = date === selected;
                   const isToday = date === today;
                   return (
-                    <td key={date} className="h-20 border border-border/40 p-0 align-top">
+                    <td
+                      key={date}
+                      className="h-12 border border-border/40 p-0 align-top md:h-20"
+                    >
                       <Link
                         href={hrefFor(date)}
                         aria-label={dayAriaLabel(date, day, isToday)}
                         aria-current={isSelected ? "date" : undefined}
-                        className={`flex h-full flex-col gap-0.5 p-1.5 text-left hover:bg-surface ${
+                        className={`flex h-full min-h-11 flex-col items-center gap-1 p-1 text-left hover:bg-surface md:items-stretch md:gap-0.5 md:p-1.5 ${
                           isSelected ? "bg-primary-soft ring-1 ring-inset ring-primary" : ""
                         }`}
                       >
@@ -147,8 +187,25 @@ export function MonthCalendar({
                         >
                           {Number(date.slice(8))}
                         </span>
+                        {kinds.length > 0 && (
+                          <span
+                            aria-hidden="true"
+                            className="flex flex-wrap justify-center gap-0.5 md:hidden"
+                          >
+                            {kinds.map((kind) => (
+                              <span
+                                key={kind}
+                                data-dot={kind}
+                                className={`size-1.5 rounded-full ${DOT_CLASS[kind]}`}
+                              />
+                            ))}
+                          </span>
+                        )}
                         {dayCounts(day).map((count) => (
-                          <span key={count} className="truncate text-[11px] text-text-muted">
+                          <span
+                            key={count}
+                            className="hidden truncate text-[11px] text-text-muted md:block"
+                          >
                             {count}
                           </span>
                         ))}
@@ -161,6 +218,19 @@ export function MonthCalendar({
           </tbody>
         </table>
       </div>
+
+      <p
+        aria-hidden="true"
+        data-legend=""
+        className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-muted md:hidden"
+      >
+        {DAY_KINDS.map((kind) => (
+          <span key={kind} className="inline-flex items-center gap-1.5">
+            <span className={`size-1.5 rounded-full ${DOT_CLASS[kind]}`} />
+            {KIND_LABEL[kind]}
+          </span>
+        ))}
+      </p>
     </section>
   );
 }

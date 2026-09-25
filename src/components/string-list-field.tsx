@@ -36,7 +36,7 @@ type PendingFocus = {
 const INPUT_CLASS =
   "w-full rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary read-only:opacity-70 aria-invalid:border-danger";
 const ICON_BUTTON_CLASS =
-  "rounded-md border border-border px-2 py-1 text-xs text-text hover:border-primary disabled:cursor-not-allowed disabled:opacity-40";
+  "min-h-11 rounded-md border border-border px-2 py-1 text-xs text-text hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 lg:min-h-0";
 
 function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1);
@@ -119,7 +119,7 @@ export function StringListField({
               <label htmlFor={inputId} className="text-xs text-text-muted">
                 {label} {position}
               </label>
-              <div className="flex items-start gap-2">
+              <div className="flex flex-col gap-2 md:flex-row md:items-start">
                 <input
                   id={inputId}
                   type="text"
@@ -131,7 +131,7 @@ export function StringListField({
                   className={INPUT_CLASS}
                   {...register(`${name}.${index}.value` as const)}
                 />
-                <div className="flex shrink-0 gap-1">
+                <div className="grid grid-cols-3 gap-2 md:flex md:shrink-0 md:gap-1">
                   <button
                     type="button"
                     data-focus-key={`up-${index}`}
@@ -197,7 +197,7 @@ export function StringListField({
           data-focus-key="add-0"
           disabled={readOnly || fields.length >= max}
           onClick={() => append({ value: "" }, { shouldFocus: true })}
-          className="rounded-md border border-border px-3 py-1.5 text-sm text-text hover:border-primary disabled:cursor-not-allowed disabled:opacity-40"
+          className="min-h-11 rounded-md border border-border px-3 py-1.5 text-sm text-text hover:border-primary disabled:cursor-not-allowed disabled:opacity-40 lg:min-h-0"
         >
           {addLabel}
         </button>
