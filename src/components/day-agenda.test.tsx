@@ -52,6 +52,7 @@ describe("DayAgenda", () => {
       screen.getByRole("heading", { name: "Agenda de quinta-feira, 24 de setembro" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Aulas" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Sessões" })).toBeInTheDocument();
     expect(screen.getByText("08:00 às 09:00")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Bruno Aluno" })).toHaveAttribute(
       "href",

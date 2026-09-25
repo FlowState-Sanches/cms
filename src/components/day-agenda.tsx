@@ -57,7 +57,7 @@ export function DayAgenda({ day }: { day: CalendarDayDetail }) {
             </AgendaSection>
           )}
           {day.sessions.length > 0 && (
-            <AgendaSection title="Sessões com mídias">
+            <AgendaSection title="Sessões">
               {day.sessions.map((session) => (
                 <SessionItem key={session.id} session={session} date={day.date} />
               ))}
