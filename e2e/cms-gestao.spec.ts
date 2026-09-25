@@ -35,6 +35,8 @@ async function login(page: Page, user: Credentials): Promise<void> {
   await page.getByLabel("E-mail").fill(user.email);
   await page.getByLabel("Senha").fill(user.password);
   await page.getByRole("button", { name: "Entrar" }).click();
+  // Sem esperar o redirect, um page.goto logo em seguida sai antes do cookie de sessão.
+  await page.waitForURL((url) => url.pathname !== "/login");
 }
 
 async function logout(page: Page): Promise<void> {
