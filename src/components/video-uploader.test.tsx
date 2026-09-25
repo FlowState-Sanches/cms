@@ -257,4 +257,18 @@ describe("VideoUploader", () => {
     expect(confirm).toHaveClass("min-h-11", "w-full", "md:w-auto");
     expect(confirm.parentElement).toHaveClass("flex-col", "md:flex-row");
   });
+
+  it("no desktop o botão de escolher arquivo volta ao espaçamento e cor padrão do navegador (Finding 1)", () => {
+    render(
+      <VideoUploader
+        trainingId="tecnico-t1"
+        demoVideoUrl="https://cdn.example/video.mp4"
+        canEdit
+      />,
+    );
+    expect(screen.getByLabelText("Enviar novo vídeo")).toHaveClass(
+      "lg:file:mr-1",
+      "lg:file:text-inherit",
+    );
+  });
 });

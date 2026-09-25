@@ -38,7 +38,7 @@ const DANGER_BUTTON =
   "min-h-11 w-full rounded-md border border-danger/60 px-3 py-2 text-sm text-danger hover:bg-danger-soft disabled:opacity-60 md:w-auto lg:min-h-0";
 /** Botão "escolher arquivo" em largura total e com 44 px no celular; no desktop, o visual atual. */
 const FILE_INPUT =
-  "w-full min-w-0 text-sm text-text-muted file:mr-3 file:min-h-11 file:w-full file:rounded-md file:border file:border-border file:bg-surface file:px-3 file:text-text md:file:w-auto lg:file:min-h-0 lg:file:rounded-none lg:file:border-0 lg:file:bg-transparent lg:file:px-0";
+  "w-full min-w-0 text-sm text-text-muted file:mr-3 file:min-h-11 file:w-full file:rounded-md file:border file:border-border file:bg-surface file:px-3 file:text-text md:file:w-auto lg:file:mr-1 lg:file:min-h-0 lg:file:rounded-none lg:file:border-0 lg:file:bg-transparent lg:file:px-0 lg:file:text-inherit";
 
 function isAcceptedType(
   type: string,
