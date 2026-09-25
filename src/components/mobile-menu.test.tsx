@@ -75,4 +75,24 @@ describe("MobileMenu", () => {
     fireEvent.keyDown(link, { key: "Escape" });
     expect(link).toHaveFocus();
   });
+
+  it("fecha ao clicar (pointerdown) fora do menu, com o menu aberto", () => {
+    const { details } = renderMenu();
+    details.open = true;
+    fireEvent.pointerDown(document.body);
+    expect(details.open).toBe(false);
+  });
+
+  it("pointerdown fora não faz nada quando o menu já está fechado", () => {
+    const { details } = renderMenu();
+    fireEvent.pointerDown(document.body);
+    expect(details.open).toBe(false);
+  });
+
+  it("pointerdown dentro do painel não fecha o menu", () => {
+    const { details } = renderMenu();
+    details.open = true;
+    fireEvent.pointerDown(screen.getByRole("link", { name: "Professores" }));
+    expect(details.open).toBe(true);
+  });
 });
