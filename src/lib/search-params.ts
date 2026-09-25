@@ -6,9 +6,11 @@ export function firstParam(value: string | string[] | undefined): string | undef
   return Array.isArray(value) ? value[0] : value;
 }
 
+const MAX_PAGE = 10_000;
+
 export function parsePage(value: string | undefined): number {
   const parsed = Number(value);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : 1;
+  return Number.isSafeInteger(parsed) && parsed > 0 && parsed <= MAX_PAGE ? parsed : 1;
 }
 
 const MAX_SEARCH_LENGTH = 100;

@@ -22,6 +22,9 @@ describe("search-params", () => {
     ["-2", 1],
     ["2.5", 1],
     ["3", 3],
+    ["1e20", 1],
+    ["10001", 1],
+    ["10000", 10000],
   ])("parsePage(%s) = %s", (value, expected) => {
     expect(parsePage(value)).toBe(expected);
   });
