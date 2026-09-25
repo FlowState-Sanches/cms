@@ -247,3 +247,31 @@ describe("StatusActions: alterações não salvas", () => {
     }
   });
 });
+
+describe("StatusActions: layout no celular", () => {
+  it("botões quebram linha e ficam em largura total com alvo de 44 px", () => {
+    render(<StatusActions training={training("review")} access={admin} />);
+    const publish = screen.getByRole("button", { name: "Publicar" });
+    expect(publish.parentElement).toHaveClass("flex-col", "md:flex-row", "md:flex-wrap");
+    for (const name of ["Publicar", "Devolver", "Arquivar"]) {
+      expect(screen.getByRole("button", { name })).toHaveClass(
+        "min-h-11",
+        "w-full",
+        "md:w-auto",
+        "lg:min-h-0",
+      );
+    }
+  });
+
+  it("diálogo de arquivar cabe na tela, com Confirmar por último", async () => {
+    const user = userEvent.setup();
+    render(<StatusActions training={training("review")} access={admin} />);
+
+    await user.click(screen.getByRole("button", { name: "Arquivar" }));
+    const dialog = screen.getByRole("dialog", { name: "Arquivar treino" });
+    expect(dialog).toHaveClass("w-[calc(100%-2rem)]", "md:w-full", "overflow-y-auto");
+    const buttons = within(dialog).getAllByRole("button");
+    expect(buttons.at(-1)).toHaveTextContent("Confirmar arquivamento");
+    expect(buttons[0]?.parentElement).toHaveClass("flex-col", "md:flex-row");
+  });
+});

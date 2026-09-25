@@ -50,12 +50,13 @@ const DIRECT_TRANSITIONS: Partial<
   Record<StatusActionKey, "submeter" | "publicar" | "despublicar">
 > = { submeter: "submeter", publicar: "publicar", despublicar: "despublicar" };
 
-const PRIMARY_BUTTON =
-  "rounded-md bg-primary px-3 py-2 text-sm font-medium text-background disabled:opacity-60";
-const SECONDARY_BUTTON =
-  "rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary disabled:opacity-60";
-const DANGER_BUTTON =
-  "rounded-md border border-danger/60 px-3 py-2 text-sm text-danger hover:bg-danger-soft disabled:opacity-60";
+/** Abaixo de 768 px o botão ocupa a largura toda; abaixo de 1024 px tem 44 px de altura. */
+const TOUCH = "min-h-11 w-full md:w-auto lg:min-h-0";
+const PRIMARY_BUTTON = `rounded-md bg-primary px-3 py-2 text-sm font-medium text-background disabled:opacity-60 ${TOUCH}`;
+const SECONDARY_BUTTON = `rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary disabled:opacity-60 ${TOUCH}`;
+const DANGER_BUTTON = `rounded-md border border-danger/60 px-3 py-2 text-sm text-danger hover:bg-danger-soft disabled:opacity-60 ${TOUCH}`;
+const DIALOG_CLASS =
+  "m-auto max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] max-w-md overflow-y-auto rounded-md border border-border bg-surface p-5 text-text backdrop:bg-black/60 md:w-full";
 
 const COMMENT = TRAINING_LIMITS.giveBackComment;
 const COMMENT_MESSAGE = `Escreva um comentário de ${COMMENT.min} a ${COMMENT.max} caracteres.`;
@@ -163,7 +164,7 @@ export function StatusActions({
 
   return (
     <section aria-label="Ações de status" className="flex flex-col gap-3">
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col gap-2 md:flex-row md:flex-wrap">
         {available.map((action) => (
           <button
             key={action}
@@ -193,7 +194,7 @@ export function StatusActions({
       {error && (
         <p
           role="alert"
-          className="rounded-md border border-danger/40 bg-danger-soft px-3 py-2 text-sm text-danger"
+          className="rounded-md border border-danger/40 bg-danger-soft px-3 py-2 text-sm text-danger wrap-anywhere"
         >
           {error}
         </p>
@@ -327,7 +328,7 @@ function ConfirmDialog({
       ref={dialogRef}
       aria-labelledby={titleId}
       onClose={onClose}
-      className="m-auto w-full max-w-md rounded-md border border-border bg-surface p-5 text-text backdrop:bg-black/60"
+      className={DIALOG_CLASS}
     >
       <div className="flex flex-col gap-4">
         <h2 id={titleId} className="font-display text-lg font-semibold">
@@ -335,11 +336,11 @@ function ConfirmDialog({
         </h2>
         {children}
         {error && (
-          <p role="alert" className="text-sm text-danger">
+          <p role="alert" className="text-sm text-danger wrap-anywhere">
             {error}
           </p>
         )}
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-col gap-2 md:flex-row md:justify-end">
           <button
             ref={cancelRef}
             type="button"

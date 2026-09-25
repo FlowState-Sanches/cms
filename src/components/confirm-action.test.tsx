@@ -121,4 +121,41 @@ describe("ConfirmAction", () => {
 
     expect(cancelEvent.defaultPrevented).toBe(false);
   });
+
+  it("no celular cabe na tela com os botões empilhados e a ação principal por último", async () => {
+    const user = userEvent.setup();
+    renderConfirm(vi.fn());
+
+    const trigger = screen.getByRole("button", { name: "Bloquear" });
+    expect(trigger).toHaveClass("min-h-11", "w-full", "md:w-auto", "lg:min-h-0");
+    await user.click(trigger);
+    const dialog = screen.getByRole("dialog", { name: "Bloquear conta" });
+    expect(dialog).toHaveClass("w-[calc(100%-2rem)]", "max-w-md", "md:w-full");
+
+    const buttons = within(dialog).getAllByRole("button");
+    expect(buttons.map((button) => button.textContent)).toEqual([
+      "Cancelar",
+      "Confirmar bloqueio",
+    ]);
+    expect(buttons[0]?.parentElement).toHaveClass("flex-col", "md:flex-row", "md:justify-end");
+    for (const button of buttons) {
+      expect(button).toHaveClass("min-h-11", "w-full", "md:w-auto");
+    }
+  });
+
+  it("mensagem de erro longa quebra e o diálogo rola por dentro (Review Focus 5)", async () => {
+    const longError = `${"Erro ".repeat(70)}${"x".repeat(60)}`;
+    const action = vi.fn().mockResolvedValue({ ok: false, error: longError });
+    const user = userEvent.setup();
+    renderConfirm(action);
+
+    await user.click(screen.getByRole("button", { name: "Bloquear" }));
+    const dialog = screen.getByRole("dialog", { name: "Bloquear conta" });
+    expect(dialog).toHaveClass("max-h-[calc(100dvh-2rem)]", "overflow-y-auto");
+    await user.click(within(dialog).getByRole("button", { name: "Confirmar bloqueio" }));
+
+    const alert = await within(dialog).findByRole("alert");
+    expect(alert).toHaveClass("wrap-anywhere");
+    expect(within(dialog).getByRole("button", { name: "Cancelar" })).toBeEnabled();
+  });
 });
