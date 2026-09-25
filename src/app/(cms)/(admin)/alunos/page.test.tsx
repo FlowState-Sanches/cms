@@ -62,6 +62,15 @@ describe("AlunosPage", () => {
     expect(screen.getByText("Nenhum aluno encontrado.")).toBeInTheDocument();
   });
 
+  it("página além do fim (total > 0, items vazio) oferece link de volta em vez de estado vazio genérico", async () => {
+    mocks.adminApi.students.mockResolvedValue({ items: [], total: 30, page: 5, limit: 20 });
+    render(await AlunosPage({ searchParams: Promise.resolve({ pagina: "5", q: "bruno" }) }));
+
+    expect(screen.queryByText("Nenhum aluno encontrado.")).not.toBeInTheDocument();
+    const link = screen.getByRole("link", { name: /primeira página/i });
+    expect(link).toHaveAttribute("href", "/alunos?q=bruno");
+  });
+
   it("sem curadoria não chama a API", async () => {
     mocks.isCurator.mockResolvedValue(false);
     expect(await AlunosPage({ searchParams: Promise.resolve({}) })).toBeNull();

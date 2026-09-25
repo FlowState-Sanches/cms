@@ -15,7 +15,7 @@ import {
   parseSearch,
   type SearchParams,
 } from "@/lib/search-params";
-import { EmptyState } from "@/components/empty-state";
+import { EmptyState, PastPageEmptyState } from "@/components/empty-state";
 import { FilterBar } from "@/components/filter-bar";
 import { Pagination } from "@/components/pagination";
 import { PeopleTable } from "@/components/people-table";
@@ -73,8 +73,10 @@ export default async function AlunosPage({
         ]}
       />
 
-      {list.items.length === 0 ? (
+      {list.total === 0 ? (
         <EmptyState title="Nenhum aluno encontrado." description="Ajuste a busca ou os filtros." />
+      ) : list.items.length === 0 ? (
+        <PastPageEmptyState firstPageHref={hrefWith("/alunos", { ...filters, pagina: undefined })} />
       ) : (
         <>
           <PeopleTable

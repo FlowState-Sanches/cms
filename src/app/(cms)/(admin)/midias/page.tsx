@@ -17,7 +17,7 @@ import {
   parsePage,
   type SearchParams,
 } from "@/lib/search-params";
-import { EmptyState } from "@/components/empty-state";
+import { EmptyState, PastPageEmptyState } from "@/components/empty-state";
 import { FilterBar, type FilterField } from "@/components/filter-bar";
 import { MediaGrid } from "@/components/media-grid";
 import { Pagination } from "@/components/pagination";
@@ -107,8 +107,10 @@ export default async function MidiasPage({
         </p>
       )}
 
-      {list.items.length === 0 ? (
+      {list.total === 0 ? (
         <EmptyState title="Nenhuma mídia encontrada." description="Ajuste os filtros." />
+      ) : list.items.length === 0 ? (
+        <PastPageEmptyState firstPageHref={hrefWith("/midias", { ...filters, pagina: undefined })} />
       ) : (
         <>
           <MediaGrid items={list.items} />
