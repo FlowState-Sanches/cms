@@ -80,7 +80,7 @@ function AgendaSection({ title, children }: { title: string; children: ReactNode
 
 function LessonItem({ lesson }: { lesson: AgendaLesson }) {
   return (
-    <li className="rounded-md bg-surface px-3 py-2 text-sm">
+    <li className="min-w-0 rounded-md bg-surface px-3 py-2 text-sm wrap-anywhere">
       <p className="font-medium text-text">
         {formatTime(lesson.startTime)} às {formatTime(lesson.endTime)}
       </p>
@@ -100,7 +100,7 @@ function LessonItem({ lesson }: { lesson: AgendaLesson }) {
 
 function GroupEventItem({ event }: { event: AgendaGroupEvent }) {
   return (
-    <li className="rounded-md bg-surface px-3 py-2 text-sm">
+    <li className="min-w-0 rounded-md bg-surface px-3 py-2 text-sm wrap-anywhere">
       <p className="font-medium text-text">
         {formatTime(event.startTime)} às {formatTime(event.endTime)}: {event.name}
       </p>
@@ -119,14 +119,14 @@ function GroupEventItem({ event }: { event: AgendaGroupEvent }) {
 
 function SessionItem({ session, date }: { session: AgendaSession; date: string }) {
   return (
-    <li className="flex gap-3 rounded-md bg-surface px-3 py-2 text-sm">
+    <li className="flex min-w-0 gap-3 rounded-md bg-surface px-3 py-2 text-sm wrap-anywhere">
       {session.coverUrl ? (
         // eslint-disable-next-line @next/next/no-img-element -- URL assinada do S3 expira; next/image guardaria uma URL morta no otimizador.
-        <img src={session.coverUrl} alt="" className="h-14 w-14 rounded object-cover" />
+        <img src={session.coverUrl} alt="" className="h-14 w-14 shrink-0 rounded object-cover" />
       ) : (
-        <div aria-hidden="true" className="h-14 w-14 rounded bg-background" />
+        <div aria-hidden="true" className="h-14 w-14 shrink-0 rounded bg-background" />
       )}
-      <div className="flex flex-col gap-0.5">
+      <div className="flex min-w-0 flex-col gap-0.5">
         <p className="font-medium text-text">
           {session.location}
           {session.startTime ? `, ${formatTime(session.startTime)}` : ""}
@@ -144,7 +144,7 @@ function SessionItem({ session, date }: { session: AgendaSession; date: string }
         <Link
           href={hrefWith("/midias", { dia: date, fotografo: session.photographer.id })}
           aria-label={`Ver mídias da sessão em ${session.location}`}
-          className="text-primary underline-offset-2 hover:underline"
+          className="inline-flex min-h-11 items-center self-start text-primary underline-offset-2 hover:underline lg:min-h-0"
         >
           Ver mídias
         </Link>
