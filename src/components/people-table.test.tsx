@@ -50,10 +50,11 @@ describe("PeopleTable", () => {
     expect(screen.getByText("12")).toBeInTheDocument();
   });
 
-  it("linka o nome para o detalhe, mostra status e data em pt-BR", () => {
+  it("linka o nome para o detalhe, mostra status e data em pt-BR no fuso de São Paulo (H6)", () => {
     render(<PeopleTable label="Professores" items={rows} hrefFor={(row) => `/professores/${row.id}`} />);
     expect(screen.getByRole("link", { name: "Ana Prof" })).toHaveAttribute("href", "/professores/u1");
     expect(screen.getByText("Bloqueado")).toBeInTheDocument();
-    expect(screen.getByText("01/09/2026")).toBeInTheDocument();
+    // 2026-09-01T12:00:00Z é 2026-09-01 09:00 em São Paulo (UTC-3).
+    expect(screen.getByText("01/09/2026 09:00")).toBeInTheDocument();
   });
 });

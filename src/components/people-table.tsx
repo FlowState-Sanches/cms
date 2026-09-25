@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { formatDate } from "@/lib/labels";
+import { formatTimestamp } from "@/lib/labels";
 import { PersonStatusBadge } from "./pill";
 
 export type PersonRow = {
@@ -81,7 +81,7 @@ export function PeopleTable<T extends PersonRow>({
               <td className={TD}>
                 <PersonStatusBadge blocked={item.blocked} />
               </td>
-              <td className={`${TD} text-text-muted`}>{formatDate(item.createdAt)}</td>
+              <td className={`${TD} text-text-muted`}>{formatTimestamp(item.createdAt)}</td>
             </tr>
           ))}
         </tbody>

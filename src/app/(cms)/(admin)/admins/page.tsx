@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { adminApi } from "@/lib/api/admin-client";
 import { getAccess, isCurator } from "@/lib/api/cached";
-import { formatDate } from "@/lib/labels";
+import { formatTimestamp } from "@/lib/labels";
 import { ConfirmAction } from "@/components/confirm-action";
 import { EmptyState } from "@/components/empty-state";
 import { GrantAdminForm } from "@/components/grant-admin-form";
@@ -74,7 +74,7 @@ export default async function AdminsPage() {
                     </td>
                     <td className={`${TD} text-text-muted`}>{admin.email}</td>
                     <td className={`${TD} text-text-muted`}>
-                      {admin.since ? formatDate(admin.since) : "Sem registro"}
+                      {admin.since ? formatTimestamp(admin.since) : "Sem registro"}
                     </td>
                     <td className={TD}>
                       <ConfirmAction

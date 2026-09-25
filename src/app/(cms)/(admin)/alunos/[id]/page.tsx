@@ -7,7 +7,7 @@ import { orNotFound } from "@/lib/api/or-not-found";
 import { entityIdSchema } from "@/lib/admin-action";
 import { LESSON_STATUS_LABELS } from "@/lib/admin-labels";
 import { formatTime } from "@/lib/dates";
-import { formatDate } from "@/lib/labels";
+import { formatDate, formatTimestamp } from "@/lib/labels";
 import { BlockToggle } from "@/components/block-toggle";
 import { EmptyState } from "@/components/empty-state";
 import { PersonHeader } from "@/components/person-header";
@@ -40,7 +40,7 @@ export default async function AlunoPage({ params }: { params: Promise<{ id: stri
         backLabel="Voltar para alunos"
         name={student.name}
         email={student.email}
-        meta={`Cadastro em ${formatDate(student.createdAt)}`}
+        meta={`Cadastro em ${formatTimestamp(student.createdAt)}`}
         badges={
           <>
             <PlanPill plan={student.plan} />

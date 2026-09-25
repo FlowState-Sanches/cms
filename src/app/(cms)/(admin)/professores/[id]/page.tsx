@@ -5,7 +5,7 @@ import { isCurator } from "@/lib/api/cached";
 import { orNotFound } from "@/lib/api/or-not-found";
 import { entityIdSchema } from "@/lib/admin-action";
 import { formatRating } from "@/lib/admin-labels";
-import { formatDate } from "@/lib/labels";
+import { formatTimestamp } from "@/lib/labels";
 import { BlockToggle } from "@/components/block-toggle";
 import { PersonHeader } from "@/components/person-header";
 import { PersonStatusBadge, VerificationPill } from "@/components/pill";
@@ -39,7 +39,7 @@ export default async function ProfessorPage({
         backLabel="Voltar para professores"
         name={professor.name}
         email={professor.email}
-        meta={`Cadastro em ${formatDate(professor.createdAt)}`}
+        meta={`Cadastro em ${formatTimestamp(professor.createdAt)}`}
         badges={
           <>
             <VerificationPill verified={professor.verified} />

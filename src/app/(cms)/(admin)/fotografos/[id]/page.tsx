@@ -6,7 +6,7 @@ import { isCurator } from "@/lib/api/cached";
 import { orNotFound } from "@/lib/api/or-not-found";
 import { entityIdSchema } from "@/lib/admin-action";
 import { formatNumber } from "@/lib/admin-labels";
-import { formatDate } from "@/lib/labels";
+import { formatDate, formatTimestamp } from "@/lib/labels";
 import { hrefWith } from "@/lib/search-params";
 import { BlockToggle } from "@/components/block-toggle";
 import { EmptyState } from "@/components/empty-state";
@@ -40,7 +40,7 @@ export default async function FotografoPage({ params }: { params: Promise<{ id: 
         backLabel="Voltar para fotógrafos"
         name={photographer.name}
         email={photographer.email}
-        meta={`Cadastro em ${formatDate(photographer.createdAt)}`}
+        meta={`Cadastro em ${formatTimestamp(photographer.createdAt)}`}
         badges={<PersonStatusBadge blocked={photographer.blocked} />}
         actions={
           <BlockToggle

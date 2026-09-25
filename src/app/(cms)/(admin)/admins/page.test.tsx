@@ -40,7 +40,8 @@ describe("AdminsPage", () => {
     const table = screen.getByRole("table", { name: "Admins do CMS" });
     const mine = within(table).getByRole("row", { name: /eu@x\.test/ });
     expect(mine).toHaveTextContent("(você)");
-    expect(mine).toHaveTextContent("01/09/2026");
+    // 2026-09-01T00:00:00Z é 2026-08-31 21:00 em São Paulo (UTC-3, H6).
+    expect(mine).toHaveTextContent("31/08/2026 21:00");
     const other = within(table).getByRole("row", { name: /outra@x\.test/ });
     expect(other).toHaveTextContent("Sem registro");
     expect(within(other).getByRole("button", { name: "Revogar" })).toBeInTheDocument();

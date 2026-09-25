@@ -13,7 +13,7 @@ import {
   MEDIA_TYPE_LABELS,
   plural,
 } from "@/lib/admin-labels";
-import { formatDate } from "@/lib/labels";
+import { formatDate, formatTimestamp } from "@/lib/labels";
 import { ConfirmAction } from "@/components/confirm-action";
 import { MEDIA_STATUS_TONE } from "@/components/media-grid";
 import { MediaPreview } from "@/components/media-preview";
@@ -71,7 +71,7 @@ export default async function MidiaPage({ params }: { params: Promise<{ id: stri
               </Link>
             </dd>
             <dt className={DT}>Enviada em</dt>
-            <dd className={DD}>{formatDate(media.createdAt)}</dd>
+            <dd className={DD}>{formatTimestamp(media.createdAt)}</dd>
             <dt className={DT}>Formato</dt>
             <dd className={DD}>{media.mimeType}</dd>
             <dt className={DT}>Tamanho</dt>
