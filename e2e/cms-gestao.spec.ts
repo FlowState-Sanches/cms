@@ -191,13 +191,11 @@ test("admin concede e revoga admin por e-mail; revogar a si mesmo é recusado", 
 
   const grantedRow = page.getByRole("row").filter({ hasText: surfista.email });
   await expect(grantedRow).toBeVisible();
-  await grantedRow.getByRole("button", { name: "Revogar", exact: true }).click();
-  await page
-    .getByRole("dialog", { name: "Revogar acesso de admin" })
-    .getByRole("button", { name: "Confirmar revogação" })
-    .click();
-  await expect(grantedRow).toHaveCount(0);
 
+  // Autorrevogação recusada: a API confere LAST_ADMIN antes de CANNOT_TARGET_SELF
+  // (cms-admins.service.ts), então isto só devolve CANNOT_TARGET_SELF enquanto
+  // o surfista ainda é admin (dois admins). Depois de revogar o surfista, o
+  // mesmo clique bateria em LAST_ADMIN em vez disso.
   const ownRow = page.getByRole("row").filter({ hasText: admin.email });
   await ownRow.getByRole("button", { name: "Revogar", exact: true }).click();
   const dialog = page.getByRole("dialog", { name: "Revogar acesso de admin" });
@@ -207,6 +205,13 @@ test("admin concede e revoga admin por e-mail; revogar a si mesmo é recusado", 
   );
   await dialog.getByRole("button", { name: "Cancelar" }).click();
   await expect(ownRow).toBeVisible();
+
+  await grantedRow.getByRole("button", { name: "Revogar", exact: true }).click();
+  await page
+    .getByRole("dialog", { name: "Revogar acesso de admin" })
+    .getByRole("button", { name: "Confirmar revogação" })
+    .click();
+  await expect(grantedRow).toHaveCount(0);
 
   await logout(page);
 });
