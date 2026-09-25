@@ -62,6 +62,8 @@ O CMS não acessa banco nem regra de negócio diretamente. Toda autorização e 
 
 Áreas só da curadoria (`canCurate`). O professor verificado continua vendo apenas Treinos; se abrir uma rota de gestão, vê "Acesso restrito", e a API responde 403.
 
+**Ordem de deploy**: o admin cai em `/painel` já no login (`src/app/(auth)/login/actions.ts`) e em `/` (`src/proxy.ts`, `src/app/page.tsx`), então o módulo `cms-admin` da API e as migrations da gestão (`users.blocked_at`, `cms_admin_events`) precisam estar no ar antes deste CMS. Publicar este CMS antes disso faz o login do admin cair no `error.tsx` em vez do painel.
+
 | Rota | O que faz |
 |---|---|
 | `/` | Admin vai para `/painel`; professor para `/treinos`. |
