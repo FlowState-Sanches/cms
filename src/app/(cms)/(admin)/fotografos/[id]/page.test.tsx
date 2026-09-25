@@ -58,6 +58,14 @@ describe("FotografoPage", () => {
     expect(
       within(table).getByRole("link", { name: "Ver mídias da sessão em Joaquina" }),
     ).toHaveAttribute("href", `/midias?dia=2026-09-24&fotografo=${ID}`);
+
+    const [card] = within(screen.getByRole("list", { name: "Sessões recentes" })).getAllByRole(
+      "listitem",
+    );
+    expect(card!.firstElementChild).toHaveTextContent(/^Joaquina$/);
+    expect(
+      within(card!).getByRole("link", { name: "Ver mídias da sessão em Joaquina" }),
+    ).toBeInTheDocument();
   });
 
   it("id fora do formato vira 404", async () => {

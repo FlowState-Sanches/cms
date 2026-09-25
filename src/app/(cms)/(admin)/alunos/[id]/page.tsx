@@ -12,14 +12,12 @@ import { BlockToggle } from "@/components/block-toggle";
 import { EmptyState } from "@/components/empty-state";
 import { PersonHeader } from "@/components/person-header";
 import { PersonStatusBadge, Pill, PlanPill } from "@/components/pill";
+import { ResponsiveList } from "@/components/responsive-list";
 import { StatCard } from "@/components/stat-card";
 
 export const metadata: Metadata = {
   title: "Aluno | FlowState CMS",
 };
-
-const TH = "px-3 py-2 font-medium";
-const TD = "px-3 py-2";
 
 export default async function AlunoPage({ params }: { params: Promise<{ id: string }> }) {
   if (!(await isCurator())) {
@@ -70,45 +68,37 @@ export default async function AlunoPage({ params }: { params: Promise<{ id: stri
         {student.recentLessons.length === 0 ? (
           <EmptyState title="Nenhuma aula registrada." />
         ) : (
-          <div
-            role="region"
-            aria-label="Aulas recentes do aluno"
-            tabIndex={0}
-            className="overflow-x-auto focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-          >
-            <table className="w-full min-w-[560px] border-collapse text-left text-sm">
-              <caption className="sr-only">Aulas recentes</caption>
-              <thead>
-                <tr className="border-b border-border text-xs uppercase tracking-wide text-text-muted">
-                  <th scope="col" className={TH}>Data</th>
-                  <th scope="col" className={TH}>Horário</th>
-                  <th scope="col" className={TH}>Professor</th>
-                  <th scope="col" className={TH}>Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {student.recentLessons.map((lesson) => (
-                  <tr key={lesson.id} className="border-b border-border/60">
-                    <td className={`${TD} text-text-muted`}>{formatDate(lesson.date)}</td>
-                    <td className={`${TD} text-text-muted`}>{formatTime(lesson.startTime)}</td>
-                    <td className={TD}>
-                      <Link
-                        href={`/professores/${lesson.professor.id}`}
-                        className="text-text underline-offset-2 hover:underline"
-                      >
-                        {lesson.professor.name}
-                      </Link>
-                    </td>
-                    <td className={TD}>
-                      <Pill tone={lesson.status === "confirmed" ? "primary" : "danger"}>
-                        {LESSON_STATUS_LABELS[lesson.status]}
-                      </Pill>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ResponsiveList
+            label="Aulas recentes do aluno"
+            caption="Aulas recentes"
+            items={student.recentLessons}
+            itemKey={(lesson) => lesson.id}
+            tableMinWidth="min-w-[560px]"
+            columns={[
+              { header: "Data", cell: (lesson) => formatDate(lesson.date) },
+              { header: "Horário", cell: (lesson) => formatTime(lesson.startTime) },
+              {
+                header: "Professor",
+                primary: true,
+                cell: (lesson) => (
+                  <Link
+                    href={`/professores/${lesson.professor.id}`}
+                    className="text-text underline-offset-2 hover:underline"
+                  >
+                    {lesson.professor.name}
+                  </Link>
+                ),
+              },
+              {
+                header: "Status",
+                cell: (lesson) => (
+                  <Pill tone={lesson.status === "confirmed" ? "primary" : "danger"}>
+                    {LESSON_STATUS_LABELS[lesson.status]}
+                  </Pill>
+                ),
+              },
+            ]}
+          />
         )}
       </section>
     </div>

@@ -47,6 +47,26 @@ describe("AdminsPage", () => {
     expect(within(other).getByRole("button", { name: "Revogar" })).toBeInTheDocument();
   });
 
+  it("no celular cada admin vira um cartão com Revogar", async () => {
+    mocks.adminApi.admins.mockResolvedValue({
+      items: [
+        { id: ME, name: "Eu", email: "eu@x.test", since: "2026-09-01T00:00:00.000Z" },
+        { id: OTHER, name: "Outra", email: "outra@x.test" },
+      ],
+    });
+    render(await AdminsPage());
+
+    const list = screen.getByRole("list", { name: "Admins do CMS" });
+    const [mine, other] = within(list).getAllByRole("listitem");
+    expect(mine).toHaveTextContent("(você)");
+    expect(within(other!).getAllByRole("term").map((term) => term.textContent)).toEqual([
+      "E-mail",
+      "Admin desde",
+      "Ações",
+    ]);
+    expect(within(other!).getByRole("button", { name: "Revogar" })).toBeInTheDocument();
+  });
+
   it("sem curadoria não chama a API", async () => {
     mocks.isCurator.mockResolvedValue(false);
     expect(await AdminsPage()).toBeNull();

@@ -65,6 +65,19 @@ describe("AlunoPage", () => {
       "/professores/p1",
     );
     expect(within(table).getByText("Cancelada")).toBeInTheDocument();
+
+    const [card] = within(screen.getByRole("list", { name: "Aulas recentes" })).getAllByRole(
+      "listitem",
+    );
+    expect(within(card!).getByRole("link", { name: "Ana Prof" })).toHaveAttribute(
+      "href",
+      "/professores/p1",
+    );
+    expect(within(card!).getAllByRole("term").map((term) => term.textContent)).toEqual([
+      "Data",
+      "Horário",
+      "Status",
+    ]);
   });
 
   it("sem aulas mostra estado vazio", async () => {
