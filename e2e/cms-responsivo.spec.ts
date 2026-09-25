@@ -63,6 +63,23 @@ async function firstTrainingHref(page: Page): Promise<string | null> {
   return link.getAttribute("href");
 }
 
+/**
+ * Primeiro link de detalhe (`<hrefPrefix><id>`) da lista visível em `listRoute`,
+ * no mesmo espírito de `firstTrainingHref`, usado para fotógrafo e mídia.
+ */
+async function firstDetailHref(
+  page: Page,
+  listRoute: string,
+  hrefPrefix: string,
+): Promise<string | null> {
+  await page.goto(listRoute);
+  const link = page.locator(`a[href^="${hrefPrefix}"]`).first();
+  if ((await link.count()) === 0) {
+    return null;
+  }
+  return link.getAttribute("href");
+}
+
 async function expectBlockDialogFits(
   page: Page,
   viewport: { width: number; height: number },
@@ -138,6 +155,20 @@ for (const viewport of VIEWPORTS) {
       const { admin, professor, surfista } = readSeedUsers();
       await login(page, admin);
       const training = await firstTrainingHref(page);
+      const photographer = await firstDetailHref(page, "/fotografos", "/fotografos/");
+      const media = await firstDetailHref(page, "/midias", "/midias/");
+      if (!photographer) {
+        test.info().annotations.push({
+          type: "sem-dados",
+          description: "/fotografos: lista vazia, pulando /fotografos/[id]",
+        });
+      }
+      if (!media) {
+        test.info().annotations.push({
+          type: "sem-dados",
+          description: "/midias: lista vazia, pulando /midias/[id]",
+        });
+      }
       const routes = [
         "/painel",
         "/treinos",
@@ -152,6 +183,8 @@ for (const viewport of VIEWPORTS) {
         "/admins",
         "/midias",
         ...(training ? [training] : []),
+        ...(photographer ? [photographer] : []),
+        ...(media ? [media] : []),
       ];
       for (const route of routes) {
         await expectNoPageOverflow(page, route);
