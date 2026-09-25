@@ -120,10 +120,10 @@ export function MonthCalendar({
           {title}
         </h2>
         <nav aria-label="Navegar entre meses" className="flex gap-2 text-sm">
-          <Link href={prevHref} className={NAV_LINK}>
+          <Link href={prevHref} scroll={false} className={NAV_LINK}>
             Mês anterior
           </Link>
-          <Link href={nextHref} className={NAV_LINK}>
+          <Link href={nextHref} scroll={false} className={NAV_LINK}>
             Próximo mês
           </Link>
         </nav>
@@ -176,6 +176,7 @@ export function MonthCalendar({
                     >
                       <Link
                         href={hrefFor(date)}
+                        scroll={false}
                         aria-label={dayAriaLabel(date, day, isToday)}
                         aria-current={isSelected ? "date" : undefined}
                         className={`flex h-full min-h-11 flex-col items-center gap-1 p-1 text-left hover:bg-surface md:items-stretch md:gap-0.5 md:p-1.5 ${
