@@ -6,11 +6,12 @@ import path from "node:path";
  * Seed de usuários E2E (FLOW-438 / Task B7).
  *
  * Roda uma única vez, no `globalSetup` do Playwright, antes de qualquer
- * teste. Cria dois usuários descartáveis diretamente na API local
- * (`POST /auth/register`), promove um a professor verificado e o outro a
- * admin por SQL direto no container docker `flowstate-postgres` (mesmo
- * caminho documentado em `api/src/modules/cms-trilha/CLAUDE.md`), e grava as
- * credenciais em `e2e/.auth/users.json` (gitignored) para os specs lerem.
+ * teste. Cria três usuários descartáveis (professor verificado, admin e um
+ * surfista sem papel extra) diretamente na API local (`POST /auth/register`),
+ * promove um a professor verificado e o outro a admin por SQL direto no
+ * container docker `flowstate-postgres` (mesmo caminho documentado em
+ * `api/src/modules/cms-trilha/CLAUDE.md`), e grava as credenciais em
+ * `e2e/.auth/users.json` (gitignored) para os specs lerem.
  *
  * Nunca imprime senha ou token nos logs.
  */
@@ -40,6 +41,8 @@ export type SeedUser = {
 export type SeedUsersFile = {
   professor: SeedUser;
   admin: SeedUser;
+  /** Conta sem papel extra (surfista, plano gratuito): alvo do bloqueio e da concessão de admin. */
+  surfista: SeedUser;
 };
 
 function readDbEnvVars(): { username: string; database: string } {
@@ -144,8 +147,10 @@ export default async function globalSetup(): Promise<void> {
   const stamp = Date.now();
   const professorEmail = `e2e-prof-${stamp}@flowstate.test`;
   const adminEmail = `e2e-admin-${stamp}@flowstate.test`;
+  const surfistaEmail = `e2e-aluno-${stamp}@flowstate.test`;
   const professorPassword = randomPassword();
   const adminPassword = randomPassword();
+  const surfistaPassword = randomPassword();
 
   const professorId = await register({
     name: "Professor E2E",
@@ -158,6 +163,12 @@ export default async function globalSetup(): Promise<void> {
     name: "Admin E2E",
     email: adminEmail,
     password: adminPassword,
+  });
+
+  const surfistaId = await register({
+    name: "Aluno E2E",
+    email: surfistaEmail,
+    password: surfistaPassword,
   });
 
   const professorToken = await login(professorEmail, professorPassword);
@@ -182,6 +193,12 @@ export default async function globalSetup(): Promise<void> {
       password: adminPassword,
       name: "Admin E2E",
       userId: adminId,
+    },
+    surfista: {
+      email: surfistaEmail,
+      password: surfistaPassword,
+      name: "Aluno E2E",
+      userId: surfistaId,
     },
   };
 
