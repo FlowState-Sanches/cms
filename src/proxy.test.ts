@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
+import { unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { describe, expect, it } from "vitest";
-import { proxy } from "./proxy";
+import { config, proxy } from "./proxy";
 import { SESSION_COOKIE } from "./lib/session";
 
 function request(pathname: string, cookie?: string): NextRequest {
@@ -47,5 +48,16 @@ describe("proxy", () => {
   it("deixa passar quando há cookie de sessão", () => {
     const response = proxy(request("/treinos", "token-valido"));
     expect(response.headers.get("location")).toBeNull();
+  });
+
+  it.each(["/favicon.ico", "/icon.svg?icon.abc.svg", "/apple-icon.png?apple-icon.abc.png"])(
+    "não intercepta o ícone %s (a tela de login também precisa dele)",
+    (url) => {
+      expect(unstable_doesMiddlewareMatch({ config, url })).toBe(false);
+    },
+  );
+
+  it("continua interceptando as rotas do CMS", () => {
+    expect(unstable_doesMiddlewareMatch({ config, url: "/treinos" })).toBe(true);
   });
 });
