@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useId, useRef, useState, useTransition } from "react";
 import type { AdminActionResult } from "@/lib/admin-action";
 
 type ConfirmActionProps = {
@@ -48,7 +48,7 @@ export function ConfirmAction({
   const runningRef = useRef(false);
   const titleId = useId();
   const descriptionId = useId();
-  const [pending, setPending] = useState(false);
+  const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
   function open() {
@@ -66,23 +66,18 @@ export function ConfirmAction({
       return;
     }
     runningRef.current = true;
-    setPending(true);
-    void (async () => {
+    startTransition(async () => {
       try {
         const result = await action();
         if (result.ok) {
-          setPending(false);
           close();
           return;
         }
-        // `setPending` e `setError` juntos no mesmo tick: o botão Cancelar
-        // reabilita no mesmo commit em que o erro aparece.
-        setPending(false);
         setError(result.error);
       } finally {
         runningRef.current = false;
       }
-    })();
+    });
   }
 
   return (
