@@ -59,7 +59,7 @@ export default async function TreinoPage({
       <header className="flex flex-col gap-2">
         <Link
           href={`/treinos?pilar=${training.pillar}`}
-          className="text-sm text-text-muted hover:text-text"
+          className="inline-flex min-h-11 items-center self-start text-sm text-text-muted hover:text-text lg:min-h-0"
         >
           Voltar para treinos
         </Link>
@@ -67,7 +67,7 @@ export default async function TreinoPage({
           <span className="font-mono text-sm text-text-muted">
             {training.code}
           </span>
-          <h1 className="font-display text-xl font-semibold text-text">
+          <h1 className="min-w-0 font-display text-xl font-semibold text-text wrap-anywhere">
             {training.title}
           </h1>
           <StatusBadge status={training.status} />
@@ -81,7 +81,7 @@ export default async function TreinoPage({
       {training.status === "draft" && training.reviewComment && (
         <div
           role="note"
-          className="rounded-md border border-accent/40 bg-accent-soft px-4 py-3 text-sm text-text"
+          className="rounded-md border border-accent/40 bg-accent-soft px-4 py-3 text-sm text-text wrap-anywhere"
         >
           <span className="font-medium">Devolvido pela curadoria:</span>{" "}
           <span className="whitespace-pre-line">{training.reviewComment}</span>

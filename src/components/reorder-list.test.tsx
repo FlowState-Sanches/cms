@@ -217,3 +217,26 @@ describe("ReorderList: salvar e desfazer", () => {
     );
   });
 });
+
+describe("ReorderList: layout no celular", () => {
+  it("título muito longo quebra dentro do item e os botões de mover têm 44 px (Review Focus 3)", () => {
+    const longTitle = "Treino".repeat(20);
+    render(
+      <ReorderList
+        pillar="tecnico"
+        items={[item("tecnico-t1", 1, longTitle), item("tecnico-t2", 2, "Segundo treino")]}
+        onSave={vi.fn()}
+      />,
+    );
+    expect(screen.getByText(longTitle)).toHaveClass("min-w-0", "wrap-anywhere");
+    const down = screen.getByRole("button", { name: `Mover ${longTitle} para baixo` });
+    expect(down).toHaveClass("min-h-11", "min-w-11", "w-full", "md:w-auto", "wrap-anywhere");
+    expect(down.parentElement).toHaveClass("flex-col", "md:flex-row");
+    expect(screen.getAllByRole("listitem")[0]).toHaveClass("flex-col", "md:flex-row");
+    expect(screen.getByRole("button", { name: "Salvar ordem" })).toHaveClass(
+      "min-h-11",
+      "w-full",
+      "md:w-auto",
+    );
+  });
+});

@@ -236,4 +236,25 @@ describe("VideoUploader", () => {
       screen.queryByRole("button", { name: "Remover vídeo" }),
     ).not.toBeInTheDocument();
   });
+
+  it("no celular o seletor de arquivo e a confirmação de remoção ocupam a largura toda", async () => {
+    const user = userEvent.setup();
+    render(
+      <VideoUploader
+        trainingId="tecnico-t1"
+        demoVideoUrl="https://cdn.example/video.mp4"
+        canEdit
+      />,
+    );
+    expect(screen.getByLabelText("Enviar novo vídeo")).toHaveClass(
+      "w-full",
+      "file:w-full",
+      "md:file:w-auto",
+      "file:min-h-11",
+    );
+    await user.click(screen.getByRole("button", { name: "Remover vídeo" }));
+    const confirm = screen.getByRole("button", { name: "Confirmar remoção" });
+    expect(confirm).toHaveClass("min-h-11", "w-full", "md:w-auto");
+    expect(confirm.parentElement).toHaveClass("flex-col", "md:flex-row");
+  });
 });

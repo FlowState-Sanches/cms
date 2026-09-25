@@ -268,4 +268,21 @@ describe("TrainingForm", () => {
     expect(screen.getByText(filled.title)).toBeInTheDocument();
     expect(screen.getByText("Sem referência externa.")).toBeInTheDocument();
   });
+
+  it("no celular o botão de salvar ocupa a largura toda com alvo de 44 px", () => {
+    render(
+      <TrainingForm
+        mode="create"
+        defaultValues={emptyTrainingForm("tecnico")}
+        pillarOptions={pillarOptions}
+        onSubmit={vi.fn()}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Salvar rascunho" })).toHaveClass(
+      "w-full",
+      "md:w-auto",
+      "min-h-11",
+      "lg:min-h-0",
+    );
+  });
 });

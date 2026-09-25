@@ -134,4 +134,16 @@ describe("StringListField", () => {
       screen.getByRole("button", { name: "Mover aprendizado 2 para cima" }),
     ).toBeDisabled();
   });
+
+  it("no celular os botões ficam abaixo do campo, em grade, com 44 px", () => {
+    render(<Harness />);
+    const up = screen.getByRole("button", { name: "Mover aprendizado 2 para cima" });
+    expect(up).toHaveClass("min-h-11", "lg:min-h-0");
+    expect(up.parentElement).toHaveClass("grid", "grid-cols-3", "md:flex");
+    expect(screen.getByLabelText("Aprendizado 2").parentElement).toHaveClass(
+      "flex-col",
+      "md:flex-row",
+    );
+    expect(screen.getByRole("button", { name: "Adicionar aprendizado" })).toHaveClass("min-h-11");
+  });
 });

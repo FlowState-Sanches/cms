@@ -47,4 +47,15 @@ describe("MobilePreview", () => {
     expect(video).toHaveAttribute("preload", "metadata");
     expect(video).toHaveAttribute("src", "https://cdn/demo.mp4");
   });
+
+  it("centralizada com largura máxima abaixo de 1024 px", () => {
+    render(<MobilePreview values={{ ...values, title: "T".repeat(80) }} demoVideoUrl={null} />);
+    expect(screen.getByRole("region", { name: "Pré-visualização no app" })).toHaveClass(
+      "mx-auto",
+      "w-full",
+      "max-w-sm",
+      "lg:max-w-none",
+    );
+    expect(screen.getByText("T".repeat(80))).toHaveClass("wrap-anywhere");
+  });
 });

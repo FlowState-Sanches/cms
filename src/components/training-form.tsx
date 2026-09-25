@@ -257,7 +257,7 @@ function EditableTrainingForm({
           </div>
         )}
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           <Field
             name="code"
             label="Código"
@@ -297,7 +297,7 @@ function EditableTrainingForm({
               step={1}
               {...a11y}
               {...register("durationMinutes", { valueAsNumber: true })}
-              className={`${INPUT_CLASS} sm:w-40`}
+              className={`${INPUT_CLASS} md:w-40`}
             />
           )}
         </Field>
@@ -470,7 +470,7 @@ function EditableTrainingForm({
             type="submit"
             disabled={isSubmitting}
             aria-busy={isSubmitting || undefined}
-            className="rounded-md bg-primary px-4 py-2 font-medium text-background disabled:opacity-60"
+            className="min-h-11 w-full rounded-md bg-primary px-4 py-2 font-medium text-background disabled:opacity-60 md:w-auto lg:min-h-0"
           >
             {SUBMIT_LABELS[mode]}
           </button>

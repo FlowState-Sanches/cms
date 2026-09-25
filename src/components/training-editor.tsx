@@ -102,7 +102,7 @@ function EditEditor({
           onSubmit={(values) => updateTrainingAction(trainingId, values)}
         />
       </div>
-      <aside aria-label="Informações do treino" className="flex flex-col gap-6">
+      <aside aria-label="Informações do treino" className="flex min-w-0 flex-col gap-6">
         <VideoUploader
           trainingId={trainingId}
           demoVideoUrl={demoVideoUrl}
