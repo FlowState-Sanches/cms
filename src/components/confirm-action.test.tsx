@@ -86,4 +86,39 @@ describe("ConfirmAction", () => {
     expect(action).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(confirm).toBeDisabled());
   });
+
+  it("Esc não fecha o diálogo enquanto a action está em andamento", async () => {
+    // jsdom não simula o fechamento nativo do <dialog> ao teclar Esc (só o
+    // navegador dispara "cancel" e fecha sozinho), então o teste dispara o
+    // evento "cancel" diretamente e verifica se o handler cancela o default.
+    const action = vi.fn(() => new Promise<AdminActionResult>(() => {}));
+    const user = userEvent.setup();
+    renderConfirm(action);
+
+    await user.click(screen.getByRole("button", { name: "Bloquear" }));
+    const dialog = screen.getByRole("dialog", { name: "Bloquear conta" });
+    const confirm = within(dialog).getByRole("button", { name: "Confirmar bloqueio" });
+    await user.click(confirm);
+    await waitFor(() => expect(confirm).toBeDisabled());
+
+    const cancelEvent = new Event("cancel", { cancelable: true });
+    dialog.dispatchEvent(cancelEvent);
+
+    expect(cancelEvent.defaultPrevented).toBe(true);
+    expect(dialog).toHaveAttribute("open");
+  });
+
+  it("Esc fecha o diálogo normalmente quando não há action em andamento", async () => {
+    const action = vi.fn();
+    const user = userEvent.setup();
+    renderConfirm(action);
+
+    await user.click(screen.getByRole("button", { name: "Bloquear" }));
+    const dialog = screen.getByRole("dialog", { name: "Bloquear conta" });
+
+    const cancelEvent = new Event("cancel", { cancelable: true });
+    dialog.dispatchEvent(cancelEvent);
+
+    expect(cancelEvent.defaultPrevented).toBe(false);
+  });
 });

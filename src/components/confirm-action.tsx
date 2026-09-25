@@ -88,6 +88,11 @@ export function ConfirmAction({
         ref={dialogRef}
         aria-labelledby={titleId}
         aria-describedby={descriptionId}
+        onCancel={(event) => {
+          if (pending) {
+            event.preventDefault();
+          }
+        }}
         onClose={() => setError(null)}
         className="m-auto w-full max-w-md rounded-md border border-border bg-surface p-5 text-text backdrop:bg-black/60"
       >
