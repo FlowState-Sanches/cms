@@ -29,10 +29,10 @@ export function PillarTabs({ pillars, active, buildHref }: PillarTabsProps) {
             key={key}
             href={buildHref(key)}
             aria-current={isActive ? "page" : undefined}
-            className={`inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 px-3 py-2 text-sm font-medium md:justify-start md:px-4 lg:min-h-0 ${
+            className={`inline-flex min-h-11 items-center justify-center rounded-md border-b-2 border-transparent px-3 py-2 text-sm font-medium md:justify-start md:rounded-t-md md:rounded-b-none md:px-4 lg:min-h-0 ${
               isActive
-                ? "border-primary text-primary"
-                : "border-transparent text-text-muted hover:text-text"
+                ? "bg-primary-soft text-primary md:border-primary md:bg-transparent"
+                : "text-text-muted hover:text-text"
             }`}
           >
             {pillar?.label ?? key}

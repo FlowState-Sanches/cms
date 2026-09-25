@@ -27,4 +27,13 @@ describe("PillarTabs", () => {
       expect(link).toHaveClass("min-h-11", "lg:min-h-0");
     }
   });
+
+  it("no celular a aba ativa usa fundo cheio em vez do sublinhado (Finding 5)", () => {
+    render(<PillarTabs pillars={pillars} active="fisico" buildHref={(key) => `/treinos?pilar=${key}`} />);
+    const nav = screen.getByRole("navigation", { name: "Pilares" });
+    const active = within(nav).getByRole("link", { name: /Físico/ });
+    expect(active).toHaveClass("bg-primary-soft", "md:bg-transparent");
+    const inactive = within(nav).getByRole("link", { name: /Técnico/ });
+    expect(inactive).not.toHaveClass("bg-primary-soft");
+  });
 });
