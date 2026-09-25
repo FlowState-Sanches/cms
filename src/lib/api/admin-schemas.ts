@@ -248,8 +248,11 @@ export type MediaList = z.infer<typeof mediaListSchema>;
 
 export const mediaDetailSchema = mediaListItemSchema.extend({
   url: z.string().nullable(),
-  // `media_assets.size_bytes` é bigint: o driver do Postgres pode serializar como string.
-  sizeBytes: z.coerce.number().nonnegative(),
+  // `media_assets.size_bytes` é bigint: o driver do Postgres pode serializar como
+  // string. `z.coerce.number()` aceitaria null/"" como 0; união fechada em dígitos.
+  sizeBytes: z
+    .union([z.number(), z.string().regex(/^\d+$/).transform(Number)])
+    .pipe(z.number().nonnegative()),
   width: z.number().nullable(),
   height: z.number().nullable(),
   durationSeconds: z.number().nullable(),

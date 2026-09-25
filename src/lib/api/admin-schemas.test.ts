@@ -66,6 +66,20 @@ describe("admin-schemas", () => {
     expect(result.sizeBytes).toBe(2048);
   });
 
+  it("recusa sizeBytes nulo ou vazio em vez de virar 0", () => {
+    const base = {
+      ...mediaItem,
+      url: "https://s3.test/assinada",
+      width: 1920,
+      height: 1080,
+      durationSeconds: null,
+      mimeType: "image/jpeg",
+      paidOrders: 0,
+    };
+    expect(mediaDetailSchema.safeParse({ ...base, sizeBytes: null }).success).toBe(false);
+    expect(mediaDetailSchema.safeParse({ ...base, sizeBytes: "" }).success).toBe(false);
+  });
+
   it("recusa item de aluno sem o plano (contrato quebrado) e descarta campo a mais", () => {
     const base = {
       id: "a1",
