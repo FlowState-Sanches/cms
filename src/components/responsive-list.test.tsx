@@ -96,6 +96,15 @@ describe("ResponsiveList", () => {
     ]);
   });
 
+  it("o título do cartão é um alvo de toque de 44 px quando é um link (Finding 4)", () => {
+    renderList();
+    const [ana] = within(screen.getByRole("list", { name: "Professores" })).getAllByRole(
+      "listitem",
+    );
+    const link = within(ana!).getByRole("link", { name: "Ana Prof" });
+    expect(link.parentElement).toHaveClass("inline-flex", "min-h-11", "items-center");
+  });
+
   it("valores longos sem espaço quebram dentro do cartão (Review Focus 1)", () => {
     const longName = "A".repeat(60);
     const longEmail = `${"a".repeat(60)}@flowstate.test`;

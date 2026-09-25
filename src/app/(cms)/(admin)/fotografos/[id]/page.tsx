@@ -98,7 +98,7 @@ export default async function FotografoPage({ params }: { params: Promise<{ id: 
                       fotografo: photographer.id,
                     })}
                     aria-label={`Ver mídias da sessão em ${session.location}`}
-                    className="text-primary underline-offset-2 hover:underline"
+                    className="inline-flex min-h-11 items-center text-primary underline-offset-2 hover:underline md:inline md:min-h-0"
                   >
                     Ver mídias
                   </Link>

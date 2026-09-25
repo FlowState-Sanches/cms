@@ -87,7 +87,7 @@ export function ResponsiveList<T>({
             className="flex min-w-0 flex-col gap-3 rounded-md border border-border bg-surface p-4 text-sm"
           >
             {primary && (
-              <div className="min-w-0 font-medium text-text wrap-anywhere">
+              <div className="inline-flex min-h-11 min-w-0 items-center font-medium text-text wrap-anywhere">
                 {primary.cell(item)}
               </div>
             )}
