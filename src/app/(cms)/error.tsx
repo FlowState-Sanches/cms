@@ -21,7 +21,7 @@ export default function CmsError({ error, retry }: CmsErrorProps) {
   return (
     <div
       role="alert"
-      className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-12 text-center"
+      className="flex flex-1 flex-col items-center justify-center gap-4 px-4 py-12 text-center md:px-6"
     >
       <h2 className="font-display text-lg font-semibold text-text">
         Não foi possível carregar esta página.
@@ -30,7 +30,7 @@ export default function CmsError({ error, retry }: CmsErrorProps) {
       <button
         type="button"
         onClick={() => retry()}
-        className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-background"
+        className="min-h-11 rounded-md bg-primary px-4 py-2 text-sm font-medium text-background lg:min-h-0"
       >
         Tentar de novo
       </button>

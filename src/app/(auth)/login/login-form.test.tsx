@@ -38,4 +38,11 @@ describe("LoginForm", () => {
       expect(screen.getByRole("alert")).toHaveTextContent("E-mail ou senha incorretos.");
     });
   });
+
+  it("campos e botão têm alvo de 44 px abaixo de 1024 px", () => {
+    render(<LoginForm sessaoExpirada={false} />);
+    expect(screen.getByLabelText("E-mail")).toHaveClass("min-h-11", "lg:min-h-0");
+    expect(screen.getByLabelText("Senha")).toHaveClass("min-h-11", "lg:min-h-0");
+    expect(screen.getByRole("button", { name: "Entrar" })).toHaveClass("min-h-11", "lg:min-h-0");
+  });
 });

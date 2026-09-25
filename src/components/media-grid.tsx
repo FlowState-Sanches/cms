@@ -18,9 +18,9 @@ function mediaLabel(item: MediaListItem): string {
 /** Grade de mídias. Server Component; cada cartão leva ao detalhe. */
 export function MediaGrid({ items }: { items: MediaListItem[] }) {
   return (
-    <ul aria-label="Mídias" className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+    <ul aria-label="Mídias" className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
       {items.map((item) => (
-        <li key={item.id}>
+        <li key={item.id} className="min-w-0">
           <Link
             href={`/midias/${item.id}`}
             aria-label={mediaLabel(item)}

@@ -9,7 +9,7 @@ export default function MidiaNotFound() {
       action={
         <Link
           href="/midias"
-          className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-background"
+          className="inline-flex min-h-11 items-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-background lg:min-h-0"
         >
           Voltar para mídias
         </Link>

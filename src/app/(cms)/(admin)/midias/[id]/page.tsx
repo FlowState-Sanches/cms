@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 const DT = "text-text-muted";
-const DD = "text-text";
+const DD = "min-w-0 text-text wrap-anywhere";
 
 export default async function MidiaPage({ params }: { params: Promise<{ id: string }> }) {
   if (!(await isCurator())) {
@@ -43,11 +43,14 @@ export default async function MidiaPage({ params }: { params: Promise<{ id: stri
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <Link href="/midias" className="text-sm text-text-muted hover:text-text">
+        <Link
+          href="/midias"
+          className="inline-flex min-h-11 items-center self-start text-sm text-text-muted hover:text-text lg:min-h-0"
+        >
           Voltar para mídias
         </Link>
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="font-display text-xl font-semibold text-text">{title}</h1>
+          <h1 className="min-w-0 font-display text-xl font-semibold text-text wrap-anywhere">{title}</h1>
           <Pill tone={MEDIA_STATUS_TONE[media.status]}>{MEDIA_STATUS_LABELS[media.status]}</Pill>
         </div>
       </header>
@@ -56,7 +59,7 @@ export default async function MidiaPage({ params }: { params: Promise<{ id: stri
         <MediaPreview media={media} />
 
         <div className="flex flex-col gap-4">
-          <dl className="grid grid-cols-[8rem_1fr] gap-2 text-sm">
+          <dl className="grid grid-cols-[8rem_minmax(0,1fr)] gap-2 text-sm">
             <dt className={DT}>Sessão</dt>
             <dd className={DD}>
               {media.session.location}, {formatDate(media.session.sessionDate)}

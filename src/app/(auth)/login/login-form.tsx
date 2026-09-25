@@ -32,7 +32,7 @@ export function LoginForm({ sessaoExpirada }: LoginFormProps) {
           autoComplete="username"
           required
           aria-invalid={state?.error ? true : undefined}
-          className="rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary"
+          className="min-h-11 rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary lg:min-h-0"
         />
       </div>
 
@@ -47,7 +47,7 @@ export function LoginForm({ sessaoExpirada }: LoginFormProps) {
           autoComplete="current-password"
           required
           aria-invalid={state?.error ? true : undefined}
-          className="rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary"
+          className="min-h-11 rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary lg:min-h-0"
         />
       </div>
 
@@ -60,7 +60,7 @@ export function LoginForm({ sessaoExpirada }: LoginFormProps) {
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 rounded-md bg-primary px-4 py-2 font-medium text-background disabled:opacity-60"
+        className="mt-2 min-h-11 rounded-md bg-primary px-4 py-2 font-medium text-background disabled:opacity-60 lg:min-h-0"
       >
         {pending ? "Entrando…" : "Entrar"}
       </button>

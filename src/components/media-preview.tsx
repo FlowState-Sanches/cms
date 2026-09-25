@@ -15,7 +15,7 @@ export function MediaPreview({ media }: MediaPreviewProps) {
 
   if (!media.url) {
     return (
-      <p className="flex min-h-48 items-center justify-center rounded-md border border-dashed border-border px-6 text-sm text-text-muted">
+      <p className="flex min-h-48 items-center justify-center rounded-md border border-dashed border-border px-4 md:px-6 text-sm text-text-muted">
         Arquivo indisponível para pré-visualização.
       </p>
     );
@@ -29,7 +29,7 @@ export function MediaPreview({ media }: MediaPreviewProps) {
         src={media.url}
         poster={media.thumbnailUrl ?? undefined}
         aria-label={description}
-        className="max-h-[70vh] w-full rounded-md bg-black"
+        className="h-auto max-h-[70vh] w-full max-w-full rounded-md bg-black"
       />
     );
   }
@@ -39,7 +39,7 @@ export function MediaPreview({ media }: MediaPreviewProps) {
     <img
       src={media.url}
       alt={description}
-      className="max-h-[70vh] w-full rounded-md bg-black object-contain"
+      className="h-auto max-h-[70vh] w-full max-w-full rounded-md bg-black object-contain"
     />
   );
 }

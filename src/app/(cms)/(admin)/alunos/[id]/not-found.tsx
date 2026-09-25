@@ -9,7 +9,7 @@ export default function AlunoNotFound() {
       action={
         <Link
           href="/alunos"
-          className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-background"
+          className="inline-flex min-h-11 items-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-background lg:min-h-0"
         >
           Voltar para alunos
         </Link>
