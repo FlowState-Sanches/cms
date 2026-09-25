@@ -8,12 +8,15 @@ type PillarTabsProps = {
   buildHref: (pillar: PillarKey) => string;
 };
 
-/** Abas de navegação por pilar, com contagem total de treinos de cada um. */
+/**
+ * Abas de navegação por pilar, com contagem total de treinos de cada um.
+ * Abaixo de 768 px viram uma grade 2 x 2 para não rolar a página.
+ */
 export function PillarTabs({ pillars, active, buildHref }: PillarTabsProps) {
   const byKey = new Map(pillars.map((pillar) => [pillar.key, pillar]));
 
   return (
-    <nav aria-label="Pilares" className="flex gap-1 border-b border-border">
+    <nav aria-label="Pilares" className="grid grid-cols-2 gap-1 border-b border-border md:flex">
       {PILLAR_ORDER.map((key) => {
         const pillar = byKey.get(key);
         const isActive = key === active;
@@ -26,7 +29,7 @@ export function PillarTabs({ pillars, active, buildHref }: PillarTabsProps) {
             key={key}
             href={buildHref(key)}
             aria-current={isActive ? "page" : undefined}
-            className={`rounded-t-md border-b-2 px-4 py-2 text-sm font-medium ${
+            className={`inline-flex min-h-11 items-center justify-center rounded-t-md border-b-2 px-3 py-2 text-sm font-medium md:justify-start md:px-4 lg:min-h-0 ${
               isActive
                 ? "border-primary text-primary"
                 : "border-transparent text-text-muted hover:text-text"

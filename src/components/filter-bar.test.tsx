@@ -37,4 +37,27 @@ describe("FilterBar", () => {
     expect(screen.getByRole("button", { name: "Filtrar" })).toHaveAttribute("type", "submit");
     expect(screen.getByRole("link", { name: "Limpar filtros" })).toHaveAttribute("href", "/professores");
   });
+
+  it("no celular empilha os campos em largura total; a partir de 768 px fica em linha", () => {
+    render(
+      <FilterBar
+        label="Filtrar alunos"
+        action="/alunos"
+        fields={[{ kind: "search", name: "q", label: "Buscar", value: "" }]}
+      />,
+    );
+    expect(screen.getByRole("search", { name: "Filtrar alunos" })).toHaveClass(
+      "flex-col",
+      "md:flex-row",
+      "md:flex-wrap",
+    );
+    expect(screen.getByLabelText("Buscar")).toHaveClass("w-full", "md:w-auto", "min-h-11");
+    expect(screen.getByRole("button", { name: "Filtrar" })).toHaveClass(
+      "w-full",
+      "md:w-auto",
+      "min-h-11",
+      "lg:min-h-0",
+    );
+    expect(screen.getByRole("link", { name: "Limpar filtros" })).toHaveClass("min-h-11");
+  });
 });

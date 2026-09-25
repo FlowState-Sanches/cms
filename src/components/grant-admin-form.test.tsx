@@ -62,4 +62,15 @@ describe("GrantAdminForm", () => {
     );
     expect(screen.getByLabelText("E-mail da conta")).not.toHaveAttribute("aria-invalid");
   });
+
+  it("no celular o campo e o botão ocupam a largura toda com alvo de 44 px", () => {
+    render(<GrantAdminForm />);
+    expect(screen.getByLabelText("E-mail da conta")).toHaveClass("min-h-11", "lg:min-h-0");
+    expect(screen.getByRole("button", { name: "Conceder acesso" })).toHaveClass(
+      "w-full",
+      "md:w-auto",
+      "min-h-11",
+      "lg:min-h-0",
+    );
+  });
 });

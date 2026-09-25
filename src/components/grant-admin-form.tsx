@@ -17,7 +17,7 @@ export function GrantAdminForm() {
   const generalError = state && !state.ok && !state.fieldError ? state.error : undefined;
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-3 sm:max-w-md">
+    <form action={formAction} noValidate className="flex flex-col gap-3 md:max-w-md">
       <div className="flex flex-col gap-1.5">
         <label htmlFor={inputId} className="text-sm font-medium text-text">
           E-mail da conta
@@ -31,7 +31,7 @@ export function GrantAdminForm() {
           defaultValue={state && !state.ok ? state.email : ""}
           aria-invalid={fieldError ? true : undefined}
           aria-describedby={fieldError ? `${hintId} ${errorId}` : hintId}
-          className="rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary aria-invalid:border-danger"
+          className="min-h-11 rounded-md border border-border bg-surface px-3 py-2 text-text outline-none focus-visible:border-primary aria-invalid:border-danger lg:min-h-0"
         />
         <p id={hintId} className="text-xs text-text-muted">
           A pessoa precisa já ter conta no FlowState. O acesso vale a partir da próxima
@@ -59,7 +59,7 @@ export function GrantAdminForm() {
         type="submit"
         disabled={pending}
         aria-busy={pending || undefined}
-        className="self-start rounded-md bg-primary px-4 py-2 text-sm font-medium text-background disabled:opacity-60"
+        className="min-h-11 w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-background disabled:opacity-60 md:w-auto md:self-start lg:min-h-0"
       >
         Conceder acesso
       </button>

@@ -81,20 +81,20 @@ export default async function TreinosPage({
 
   return (
     <div className="flex flex-1 flex-col gap-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between md:gap-4">
         <h1 className="font-display text-xl font-semibold text-text">Treinos</h1>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 md:flex-row">
           {access.canCurate && (
             <Link
               href={`/pilares/${pilar}/ordem`}
-              className="rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary"
+              className="inline-flex min-h-11 items-center justify-center rounded-md border border-border px-3 py-2 text-sm text-text hover:border-primary lg:min-h-0"
             >
               Reordenar pilar
             </Link>
           )}
           <Link
             href={`/treinos/novo?pilar=${pilar}`}
-            className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-background"
+            className="inline-flex min-h-11 items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-background lg:min-h-0"
           >
             Novo treino
           </Link>
@@ -115,7 +115,7 @@ export default async function TreinosPage({
               key={filter.label}
               href={buildTreinosHref({ pilar, status: filter.value })}
               aria-current={isActive ? "page" : undefined}
-              className={`rounded-full border px-3 py-1 ${
+              className={`inline-flex min-h-11 items-center rounded-full border px-3 py-1 lg:min-h-0 ${
                 isActive
                   ? "border-primary text-primary"
                   : "border-border text-text-muted hover:text-text"
